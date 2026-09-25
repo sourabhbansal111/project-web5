@@ -5,118 +5,10 @@
 
 
 // =========================================
-// CITY DATA
+// API / DATA SOURCE
 // =========================================
 
-const cityData = {
-
-    totalReports: 1248,
-
-    resolvedReports: 876,
-
-    progressReports: 241,
-
-    pendingReports: 131
-
-};
-
-
-// =========================================
-// CATEGORY DATA
-// =========================================
-
-const categories = [
-
-    {
-        name: "Potholes",
-        icon: "🕳️",
-        count: 342
-    },
-
-    {
-        name: "Waste & Garbage",
-        icon: "🗑️",
-        count: 276
-    },
-
-    {
-        name: "Broken Streetlights",
-        icon: "💡",
-        count: 198
-    },
-
-    {
-        name: "Water Issues",
-        icon: "💧",
-        count: 167
-    },
-
-    {
-        name: "Damaged Roads",
-        icon: "🚧",
-        count: 145
-    },
-
-    {
-        name: "Drainage",
-        icon: "🚰",
-        count: 120
-    }
-
-];
-
-
-// =========================================
-// STATUS DATA
-// =========================================
-
-const statuses = [
-
-    {
-        name: "Submitted",
-
-        description:
-            "Awaiting initial review",
-
-        count: 131,
-
-        className: "submitted"
-    },
-
-    {
-        name: "Under Review",
-
-        description:
-            "Being verified",
-
-        count: 89,
-
-        className: "review"
-    },
-
-    {
-        name: "In Progress",
-
-        description:
-            "Work is underway",
-
-        count: 241,
-
-        className: "progress-status"
-    },
-
-    {
-        name: "Resolved",
-
-        description:
-            "Issue successfully fixed",
-
-        count: 876,
-
-        className: "resolved"
-    }
-
-];
+const DATA_URL = "../data/dashboard.json";
 
 
 // =========================================
@@ -124,76 +16,103 @@ const statuses = [
 // =========================================
 
 const totalReports =
-    document.getElementById(
-        "totalReports"
-    );
-
+    document.getElementById("totalReports");
 
 const resolvedReports =
-    document.getElementById(
-        "resolvedReports"
-    );
-
+    document.getElementById("resolvedReports");
 
 const progressReports =
-    document.getElementById(
-        "progressReports"
-    );
-
+    document.getElementById("progressReports");
 
 const pendingReports =
-    document.getElementById(
-        "pendingReports"
-    );
-
+    document.getElementById("pendingReports");
 
 const categoryContainer =
-    document.getElementById(
-        "categoryContainer"
-    );
-
+    document.getElementById("categoryContainer");
 
 const statusContainer =
-    document.getElementById(
-        "statusContainer"
-    );
-
+    document.getElementById("statusContainer");
 
 const lastUpdated =
-    document.getElementById(
-        "lastUpdated"
-    );
+    document.getElementById("lastUpdated");
+
+
+// =========================================
+// FETCH DASHBOARD DATA
+// =========================================
+
+async function fetchDashboardData() {
+
+    try {
+
+        const response =
+            await fetch(DATA_URL);
+
+
+        // Check HTTP response
+
+        if (!response.ok) {
+
+            throw new Error(
+                `HTTP Error: ${response.status}`
+            );
+
+        }
+
+
+        // Convert response into JSON
+
+        const data =
+            await response.json();
+
+
+        return data;
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Failed to load dashboard data:",
+            error
+        );
+
+        showDataError();
+
+    }
+
+}
 
 
 // =========================================
 // UPDATE STATISTICS
 // =========================================
 
-function updateStatistics() {
+function updateStatistics(statistics) {
 
     totalReports.textContent =
-        cityData.totalReports.toLocaleString();
+        statistics.totalReports.toLocaleString();
 
 
     resolvedReports.textContent =
-        cityData.resolvedReports.toLocaleString();
+        statistics.resolvedReports.toLocaleString();
 
 
     progressReports.textContent =
-        cityData.progressReports.toLocaleString();
+        statistics.progressReports.toLocaleString();
 
 
     pendingReports.textContent =
-        cityData.pendingReports.toLocaleString();
+        statistics.pendingReports.toLocaleString();
 
 }
 
 
 // =========================================
-// RENDER CATEGORY DATA
+// RENDER CATEGORIES
 // =========================================
 
-function renderCategories() {
+function renderCategories(categories) {
 
     categoryContainer.innerHTML = "";
 
@@ -206,152 +125,162 @@ function renderCategories() {
         );
 
 
-    categories.forEach(
-        category => {
+    categories.forEach(category => {
 
-            const percentage =
-                (
-                    category.count /
-                    maximum
-                ) * 100;
+        const percentage =
+            (category.count / maximum) * 100;
 
 
-            const item =
-                document.createElement(
-                    "div"
-                );
+        const item =
+            document.createElement("div");
 
 
-            item.classList.add(
-                "issue-item"
-            );
+        item.classList.add(
+            "issue-item"
+        );
 
 
-            item.innerHTML = `
+        item.innerHTML = `
 
-                <div class="issue-top">
+            <div class="issue-top">
 
-                    <span class="issue-name">
+                <span class="issue-name">
 
-                        ${category.icon}
+                    ${category.icon}
 
-                        ${category.name}
+                    ${category.name}
 
-                    </span>
-
-
-                    <span class="issue-count">
-
-                        ${category.count}
-
-                    </span>
-
-                </div>
+                </span>
 
 
-                <div class="progress">
+                <span class="issue-count">
 
-                    <div
-                        class="progress-bar"
-                        style="width: ${percentage}%"
-                    ></div>
+                    ${category.count}
 
-                </div>
+                </span>
 
-            `;
+            </div>
 
 
-            categoryContainer.appendChild(
-                item
-            );
+            <div class="progress">
 
-        }
-    );
+                <div
+                    class="progress-bar"
+                    style="width: ${percentage}%"
+                ></div>
+
+            </div>
+
+        `;
+
+
+        categoryContainer.appendChild(item);
+
+    });
 
 }
 
 
 // =========================================
-// RENDER STATUS DATA
+// RENDER STATUS
 // =========================================
 
-function renderStatuses() {
+function renderStatuses(statuses) {
 
     statusContainer.innerHTML = "";
 
 
-    statuses.forEach(
-        status => {
+    statuses.forEach(status => {
 
-            const item =
-                document.createElement(
-                    "div"
-                );
+        const item =
+            document.createElement("div");
 
 
-            item.classList.add(
-                "status-item"
-            );
+        item.classList.add(
+            "status-item"
+        );
 
 
-            item.innerHTML = `
+        item.innerHTML = `
 
-                <div
-                    class="status-dot
-                    ${status.className}"
-                ></div>
-
-
-                <div class="status-info">
-
-                    <strong>
-                        ${status.name}
-                    </strong>
-
-                    <span>
-                        ${status.description}
-                    </span>
-
-                </div>
+            <div
+                class="status-dot ${status.className}"
+            ></div>
 
 
-                <div class="status-number">
+            <div class="status-info">
 
-                    ${status.count}
+                <strong>
+                    ${status.name}
+                </strong>
 
-                </div>
+                <span>
+                    ${status.description}
+                </span>
 
-            `;
+            </div>
 
 
-            statusContainer.appendChild(
-                item
-            );
+            <div class="status-number">
 
-        }
-    );
+                ${status.count}
+
+            </div>
+
+        `;
+
+
+        statusContainer.appendChild(item);
+
+    });
 
 }
 
 
 // =========================================
-// UPDATE TIME
+// UPDATE LAST UPDATED TIME
 // =========================================
 
-function updateTime() {
+function updateLastUpdated() {
 
-    const currentTime =
+    const date =
         new Date();
 
 
     lastUpdated.textContent =
-        currentTime.toLocaleTimeString(
+        date.toLocaleString(
             [],
             {
-                hour: "2-digit",
-                minute: "2-digit"
+                dateStyle: "medium",
+                timeStyle: "short"
             }
         );
+
+}
+
+
+// =========================================
+// ERROR UI
+// =========================================
+
+function showDataError() {
+
+    categoryContainer.innerHTML = `
+
+        <p>
+            ⚠️ Unable to load dashboard data.
+        </p>
+
+    `;
+
+
+    statusContainer.innerHTML = `
+
+        <p>
+            Please try again later.
+        </p>
+
+    `;
 
 }
 
@@ -360,21 +289,52 @@ function updateTime() {
 // INITIALIZE DASHBOARD
 // =========================================
 
-function initializeDashboard() {
+async function initializeDashboard() {
 
-    updateStatistics();
+    console.log(
+        "Loading FixMyCity dashboard..."
+    );
 
-    renderCategories();
 
-    renderStatuses();
+    const data =
+        await fetchDashboardData();
 
-    updateTime();
+
+    if (!data) {
+
+        return;
+
+    }
+
+
+    console.log(
+        "Dashboard data loaded:",
+        data
+    );
+
+
+    updateStatistics(
+        data.statistics
+    );
+
+
+    renderCategories(
+        data.categories
+    );
+
+
+    renderStatuses(
+        data.statuses
+    );
+
+
+    updateLastUpdated();
 
 }
 
 
 // =========================================
-// START
+// START APPLICATION
 // =========================================
 
 document.addEventListener(

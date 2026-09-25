@@ -1,0 +1,68 @@
+{
+    "statistics": {
+        "totalReports": 2500,
+        "resolvedReports": 876,
+        "progressReports": 241,
+        "pendingReports": 131
+    },
+
+    "categories": [
+        {
+            "name": "Potholes",
+            "icon": "🕳️",
+            "count": 342
+        },
+        {
+            "name": "Waste & Garbage",
+            "icon": "🗑️",
+            "count": 276
+        },
+        {
+            "name": "Broken Streetlights",
+            "icon": "💡",
+            "count": 198
+        },
+        {
+            "name": "Water Issues",
+            "icon": "💧",
+            "count": 167
+        },
+        {
+            "name": "Damaged Roads",
+            "icon": "🚧",
+            "count": 145
+        },
+        {
+            "name": "Drainage",
+            "icon": "🚰",
+            "count": 120
+        }
+    ],
+
+    "statuses": [
+        {
+            "name": "Submitted",
+            "description": "Awaiting initial review",
+            "count": 131,
+            "className": "submitted"
+        },
+        {
+            "name": "Under Review",
+            "description": "Being verified",
+            "count": 89,
+            "className": "review"
+        },
+        {
+            "name": "In Progress",
+            "description": "Work is underway",
+            "count": 241,
+            "className": "progress-status"
+        },
+        {
+            "name": "Resolved",
+            "description": "Issue successfully fixed",
+            "count": 876,
+            "className": "resolved"
+        }
+    ]
+}
