@@ -139,6 +139,57 @@ nav a.active {
 
     font-weight: bold;
 }
+/* ============================= */
+/* AUTH ACTIONS */
+/* ============================= */
+
+.auth-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.login-btn,
+.signup-btn {
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 9px 16px;
+    border-radius: 7px;
+    transition: all 0.2s ease;
+}
+
+/* LOGIN */
+
+.login-btn {
+    color: #2563eb;
+    border: 1px solid #2563eb;
+    background: transparent;
+}
+
+.login-btn:hover {
+    background: #eff6ff;
+}
+
+/* SIGN UP */
+
+.signup-btn {
+    color: white;
+    background: #2563eb;
+    border: 1px solid #2563eb;
+}
+
+.signup-btn:hover {
+    background: #1d4ed8;
+}
+
+/* REPORT BUTTON */
+
+.report-btn {
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+}
 
 
 .report-btn {
