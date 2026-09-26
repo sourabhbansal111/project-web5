@@ -16,11 +16,124 @@
         rel="stylesheet"
         href="../css/dashboard.css"
     >
+    <link rel="stylesheet" href="../css/auth.css">
 
 </head>
 
 
 <body>
+    <div id="authModal" class="auth-modal">
+
+        <div class="auth-box">
+
+            <button
+                id="closeAuth"
+                class="close-auth"
+            >
+                ×
+            </button>
+
+
+            <div class="auth-logo">
+                <span>Fix</span>MyCity
+            </div>
+
+
+            <!-- LOGIN -->
+
+            <div id="loginSection">
+
+                <h2>Welcome Back</h2>
+
+                <p>Login to your FixMyCity account</p>
+
+                <form id="loginForm">
+
+                    <input
+                        type="email"
+                        id="loginEmail"
+                        placeholder="Email"
+                        required
+                    >
+
+                    <input
+                        type="password"
+                        id="loginPassword"
+                        placeholder="Password"
+                        required
+                    >
+
+                    <button type="submit">
+                        Login
+                    </button>
+
+                </form>
+
+                <div class="auth-switch">
+
+                    Don't have an account?
+
+                    <button id="showSignup">
+                        Sign Up
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- SIGN UP -->
+
+            <div id="signupSection">
+
+                <h2>Create Account</h2>
+
+                <p>Join FixMyCity today</p>
+
+                <form id="signupForm">
+
+                    <input
+                        type="text"
+                        id="signupName"
+                        placeholder="Full Name"
+                        required
+                    >
+
+                    <input
+                        type="email"
+                        id="signupEmail"
+                        placeholder="Email"
+                        required
+                    >
+
+                    <input
+                        type="password"
+                        id="signupPassword"
+                        placeholder="Password"
+                        required
+                    >
+
+                    <button type="submit">
+                        Create Account
+                    </button>
+
+                </form>
+
+                <div class="auth-switch">
+
+                    Already have an account?
+
+                    <button id="showLogin">
+                        Login
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
 
     <!-- ================= NAVBAR ================= -->
 
@@ -47,18 +160,15 @@
 
         <nav>
 
-            <a
-                href="dashboard.html"
-                class="active"
-            >
+            <a href="#" class="active">
                 Dashboard
             </a>
 
-            <a href="report.html">
+            <a href="#">
                 Report Issue
             </a>
 
-            <a href="track.html">
+            <a href="#">
                 Track Complaint
             </a>
 
@@ -71,26 +181,40 @@
 
         <div class="auth-actions">
 
-            <a
-                href="login.html"
+            <!-- Shown when logged out -->
+
+            <button
+                id="loginBtn"
                 class="login-btn"
             >
                 Login
-            </a>
+            </button>
 
-            <a
-                href="signup.html"
+            <button
+                id="signupBtn"
                 class="signup-btn"
             >
                 Sign Up
-            </a>
+            </button>
 
-            <a
-                href="report.html"
-                class="report-btn"
+
+            <!-- Shown when logged in -->
+
+            <span
+                id="userName"
+                class="user-name"
+            ></span>
+
+            <button
+                id="logoutBtn"
+                class="logout-btn"
             >
+                Logout
+            </button>
+
+            <button class="report-btn">
                 + Report Issue
-            </a>
+            </button>
 
         </div>
 
@@ -334,6 +458,7 @@
         type="module"
         src="../js/dashboard.js"
     ></script>
+    <script src="../js/auth.js"></script>
 
 </body>
 
