@@ -361,21 +361,27 @@ loginForm.addEventListener(
 
             // ADMIN LOGIN
 
-            if (
-                email ===
-                ADMIN_ACCOUNT.email
-            ) {
+            if (email === ADMIN_ACCOUNT.email) {
 
-                // Admin password is currently
-                // handled separately.
-                //
-                // We'll replace this with
-                // proper admin authentication
-                // in the admin feature.
+                if (password !== ADMIN_ACCOUNT.password) {
 
-                alert(
-                    "Admin login will be connected in the Admin feature."
-                );
+                    alert("Invalid admin credentials.");
+
+                    return;
+                }
+
+                setLoginState({
+                    id: ADMIN_ACCOUNT.id,
+                    name: ADMIN_ACCOUNT.name,
+                    email: ADMIN_ACCOUNT.email,
+                    role: ADMIN_ACCOUNT.role
+                });
+
+                loginForm.reset();
+
+                authModal.classList.remove("active");
+
+                updateAuthUI();
 
                 return;
             }
@@ -602,6 +608,22 @@ function updateAuthUI() {
             "none";
 
         userName.style.display =
+            "none";
+
+    }
+        const adminPanelLink =
+        document.getElementById(
+            "adminPanelLink"
+        );
+
+    if (role === "admin") {
+
+        adminPanelLink.style.display =
+            "inline-block";
+
+    } else {
+
+        adminPanelLink.style.display =
             "none";
 
     }

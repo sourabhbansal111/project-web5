@@ -19,6 +19,7 @@ const ADMIN_ACCOUNT = {
     id: "admin-001",
     name: "FixMyCity Admin",
     email: "admin@fixmycity.com",
+    password: "Admin@123",
     role: "admin"
 };
 
@@ -620,26 +621,6 @@ async function removeWorker(workerId) {
 // INITIALIZE
 // =========================================
 
-document.addEventListener(
-    "DOMContentLoaded",
-    async () => {
 
-        try {
 
-            await openDatabase();
-
-            console.log(
-                "FixMyCity database ready."
-            );
-
-        } catch (error) {
-
-            console.error(
-                "Database initialization failed:",
-                error
-            );
-
-        }
-
-    }
-);
+window.dbReady = openDatabase();

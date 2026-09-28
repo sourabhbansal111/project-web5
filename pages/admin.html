@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin | FixMyCity</title>
+
+    <link rel="stylesheet" href="../css/admin.css">
+</head>
+
+<body>
+
+    <header class="admin-navbar">
+
+        <div class="admin-logo">
+            <div class="logo-icon">F</div>
+
+            <div>
+                <h2>FixMyCity</h2>
+                <span>Admin Panel</span>
+            </div>
+        </div>
+
+        <div class="admin-actions">
+
+            <a href="dashboard.html">
+                Dashboard
+            </a>
+
+            <button id="adminLogout">
+                Logout
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <main class="admin-container">
+
+        <section class="admin-header">
+
+            <div>
+                <p class="eyebrow">
+                    ADMINISTRATION
+                </p>
+
+                <h1>Worker Management</h1>
+
+                <p>
+                    Manage users and workers of FixMyCity.
+                </p>
+            </div>
+
+        </section>
+
+
+        <!-- ADD WORKER -->
+
+        <section class="admin-card">
+
+            <h2>Add Worker</h2>
+
+            <p>
+                Enter the email of a registered user
+                to promote them to worker.
+            </p>
+
+            <form id="addWorkerForm">
+
+                <input
+                    type="email"
+                    id="workerEmail"
+                    placeholder="Enter registered user's email"
+                    required
+                >
+
+                <button type="submit">
+                    Add Worker
+                </button>
+
+            </form>
+
+        </section>
+
+
+        <!-- WORKERS -->
+
+        <section class="admin-card">
+
+            <div class="section-heading">
+
+                <div>
+                    <h2>Current Workers</h2>
+
+                    <p>
+                        Users currently assigned the worker role.
+                    </p>
+                </div>
+
+                <span id="workerCount">
+                    0 Workers
+                </span>
+
+            </div>
+
+
+            <div
+                id="workerList"
+                class="worker-list"
+            >
+
+            </div>
+
+        </section>
+
+
+        <!-- ALL USERS -->
+
+        <section class="admin-card">
+
+            <div class="section-heading">
+
+                <div>
+                    <h2>Registered Users</h2>
+
+                    <p>
+                        All users registered on FixMyCity.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div
+                id="userList"
+                class="user-list"
+            >
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <script src="../js/database.js"></script>
+    <script src="../js/admin.js"></script>
+
+</body>
+
+</html>
