@@ -1,10 +1,13 @@
 // =========================================
 // FIXMYCITY
-// Authentication System
+// Authentication
+// IndexedDB + localStorage
 // =========================================
 
 
+// =========================================
 // DOM ELEMENTS
+// =========================================
 
 const authModal = document.getElementById("authModal");
 
@@ -26,7 +29,9 @@ const signupForm = document.getElementById("signupForm");
 const userName = document.getElementById("userName");
 
 
+// =========================================
 // OPEN LOGIN
+// =========================================
 
 loginBtn.addEventListener("click", () => {
 
@@ -38,7 +43,9 @@ loginBtn.addEventListener("click", () => {
 });
 
 
+// =========================================
 // OPEN SIGNUP
+// =========================================
 
 signupBtn.addEventListener("click", () => {
 
@@ -50,7 +57,9 @@ signupBtn.addEventListener("click", () => {
 });
 
 
+// =========================================
 // SWITCH TO SIGNUP
+// =========================================
 
 showSignup.addEventListener("click", () => {
 
@@ -60,7 +69,9 @@ showSignup.addEventListener("click", () => {
 });
 
 
+// =========================================
 // SWITCH TO LOGIN
+// =========================================
 
 showLogin.addEventListener("click", () => {
 
@@ -70,7 +81,9 @@ showLogin.addEventListener("click", () => {
 });
 
 
+// =========================================
 // CLOSE MODAL
+// =========================================
 
 closeAuth.addEventListener("click", () => {
 
@@ -79,184 +92,546 @@ closeAuth.addEventListener("click", () => {
 });
 
 
+// =========================================
 // CLOSE WHEN CLICKING OUTSIDE
+// =========================================
 
 authModal.addEventListener("click", (event) => {
 
     if (event.target === authModal) {
+
         authModal.classList.remove("active");
+
     }
 
 });
 
 
-// SIGN UP
+// =========================================
+// PASSWORD HASH
+// =========================================
 
-signupForm.addEventListener("submit", (event) => {
+async function hashPassword(password, salt) {
 
-    event.preventDefault();
+    const encoder =
+        new TextEncoder();
 
-    const name =
-        document.getElementById("signupName").value.trim();
+    const passwordData =
+        encoder.encode(password);
 
-    const email =
-        document.getElementById("signupEmail").value.trim();
+    const saltData =
+        encoder.encode(salt);
 
-    const password =
-        document.getElementById("signupPassword").value;
 
-    if (!name || !email || !password) {
-        return;
-    }
+    const combinedData =
+        new Uint8Array(
+            passwordData.length +
+            saltData.length
+        );
 
-    // Store demo account
 
-    localStorage.setItem(
-        "fixmycityUser",
-        JSON.stringify({
-            name: name,
-            email: email,
-            password: password
-        })
+    combinedData.set(passwordData, 0);
+    combinedData.set(
+        saltData,
+        passwordData.length
     );
 
-    // Automatically login
+
+    const hashBuffer =
+        await crypto.subtle.digest(
+            "SHA-256",
+            combinedData
+        );
+
+
+    const hashArray =
+        Array.from(
+            new Uint8Array(hashBuffer)
+        );
+
+
+    return hashArray
+        .map(
+            byte =>
+                byte
+                    .toString(16)
+                    .padStart(2, "0")
+        )
+        .join("");
+
+}
+
+
+// =========================================
+// GENERATE SALT
+// =========================================
+
+function generateSalt() {
+
+    const array =
+        new Uint8Array(16);
+
+    crypto.getRandomValues(array);
+
+
+    return Array
+        .from(array)
+        .map(
+            byte =>
+                byte
+                    .toString(16)
+                    .padStart(2, "0")
+        )
+        .join("");
+
+}
+
+
+// =========================================
+// SIGN UP
+// =========================================
+
+signupForm.addEventListener(
+    "submit",
+    async (event) => {
+
+        event.preventDefault();
+
+
+        const name =
+            document
+                .getElementById("signupName")
+                .value
+                .trim();
+
+
+        const email =
+            document
+                .getElementById("signupEmail")
+                .value
+                .trim()
+                .toLowerCase();
+
+
+        const password =
+            document
+                .getElementById("signupPassword")
+                .value;
+
+
+        if (
+            !name ||
+            !email ||
+            !password
+        ) {
+
+            alert(
+                "Please fill all fields."
+            );
+
+            return;
+
+        }
+
+
+        try {
+
+            // Check existing account
+
+            const existingUser =
+                await getUserByEmail(email);
+
+
+            if (existingUser) {
+
+                alert(
+                    "An account with this email already exists."
+                );
+
+                return;
+
+            }
+
+
+            // Generate unique salt
+
+            const salt =
+                generateSalt();
+
+
+            // Hash password
+
+            const passwordHash =
+                await hashPassword(
+                    password,
+                    salt
+                );
+
+
+            // Create user
+
+            const userId =
+                await addUser({
+
+                    name: name,
+
+                    email: email,
+
+                    passwordHash:
+                        passwordHash,
+
+                    salt: salt
+
+                });
+
+
+            // Login new user
+
+            setLoginState({
+
+                id: userId,
+
+                name: name,
+
+                email: email,
+
+                role: "user"
+
+            });
+
+
+            signupForm.reset();
+
+            authModal.classList.remove(
+                "active"
+            );
+
+
+            updateAuthUI();
+
+
+            alert(
+                "Account created successfully!"
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "Signup error:",
+                error
+            );
+
+            alert(
+                "Unable to create account."
+            );
+
+        }
+
+    }
+);
+
+
+// =========================================
+// LOGIN
+// =========================================
+
+loginForm.addEventListener(
+    "submit",
+    async (event) => {
+
+        event.preventDefault();
+
+
+        const email =
+            document
+                .getElementById("loginEmail")
+                .value
+                .trim()
+                .toLowerCase();
+
+
+        const password =
+            document
+                .getElementById("loginPassword")
+                .value;
+
+
+        try {
+
+            // ADMIN LOGIN
+
+            if (
+                email ===
+                ADMIN_ACCOUNT.email
+            ) {
+
+                // Admin password is currently
+                // handled separately.
+                //
+                // We'll replace this with
+                // proper admin authentication
+                // in the admin feature.
+
+                alert(
+                    "Admin login will be connected in the Admin feature."
+                );
+
+                return;
+            }
+
+
+            // Find user
+
+            const user =
+                await getUserByEmail(email);
+
+
+            if (!user) {
+
+                alert(
+                    "Invalid email or password."
+                );
+
+                return;
+
+            }
+
+
+            // Hash entered password
+            // using the stored salt
+
+            const enteredHash =
+                await hashPassword(
+                    password,
+                    user.salt
+                );
+
+
+            // Compare hashes
+
+            if (
+                enteredHash !==
+                user.passwordHash
+            ) {
+
+                alert(
+                    "Invalid email or password."
+                );
+
+                return;
+
+            }
+
+
+            // Successful login
+
+            setLoginState({
+
+                id: user.id,
+
+                name: user.name,
+
+                email: user.email,
+
+                role: user.role
+
+            });
+
+
+            loginForm.reset();
+
+            authModal.classList.remove(
+                "active"
+            );
+
+
+            updateAuthUI();
+
+
+        } catch (error) {
+
+            console.error(
+                "Login error:",
+                error
+            );
+
+            alert(
+                "Unable to login."
+            );
+
+        }
+
+    }
+);
+
+
+// =========================================
+// SAVE LOGIN STATE
+// =========================================
+
+function setLoginState(user) {
 
     localStorage.setItem(
         "fixmycityLoggedIn",
         "true"
     );
 
+
     localStorage.setItem(
-        "fixmycityCurrentUser",
-        name
+        "fixmycityUserId",
+        user.id
     );
 
-    signupForm.reset();
 
-    authModal.classList.remove("active");
-
-    updateAuthUI();
-
-});
+    localStorage.setItem(
+        "fixmycityCurrentUser",
+        user.name
+    );
 
 
-// LOGIN
+    localStorage.setItem(
+        "fixmycityCurrentEmail",
+        user.email
+    );
 
-loginForm.addEventListener("submit", (event) => {
 
-    event.preventDefault();
+    localStorage.setItem(
+        "fixmycityRole",
+        user.role
+    );
 
-    const email =
-        document.getElementById("loginEmail").value.trim();
+}
 
-    const password =
-        document.getElementById("loginPassword").value;
 
-    const savedUser =
-        JSON.parse(
-            localStorage.getItem("fixmycityUser")
+// =========================================
+// LOGOUT
+// =========================================
+
+logoutBtn.addEventListener(
+    "click",
+    () => {
+
+        localStorage.removeItem(
+            "fixmycityLoggedIn"
         );
 
-    if (!savedUser) {
-
-        alert("No account found. Please sign up first.");
-
-        return;
-    }
-
-    if (
-        email === savedUser.email &&
-        password === savedUser.password
-    ) {
-
-        localStorage.setItem(
-            "fixmycityLoggedIn",
-            "true"
+        localStorage.removeItem(
+            "fixmycityUserId"
         );
 
-        localStorage.setItem(
-            "fixmycityCurrentUser",
-            savedUser.name
+        localStorage.removeItem(
+            "fixmycityCurrentUser"
         );
 
-        loginForm.reset();
+        localStorage.removeItem(
+            "fixmycityCurrentEmail"
+        );
 
-        authModal.classList.remove("active");
+        localStorage.removeItem(
+            "fixmycityRole"
+        );
+
 
         updateAuthUI();
 
-    } else {
-
-        alert("Invalid email or password.");
-
     }
-
-});
-
-
-// LOGOUT
-
-logoutBtn.addEventListener("click", () => {
-
-    localStorage.removeItem(
-        "fixmycityLoggedIn"
-    );
-
-    localStorage.removeItem(
-        "fixmycityCurrentUser"
-    );
-
-    updateAuthUI();
-
-});
+);
 
 
+// =========================================
 // UPDATE NAVBAR
+// =========================================
 
 function updateAuthUI() {
 
     const isLoggedIn =
-        localStorage.getItem("fixmycityLoggedIn") === "true";
+        localStorage.getItem(
+            "fixmycityLoggedIn"
+        ) === "true";
+
 
     const currentUser =
-        localStorage.getItem("fixmycityCurrentUser");
+        localStorage.getItem(
+            "fixmycityCurrentUser"
+        );
+
+
+    const role =
+        localStorage.getItem(
+            "fixmycityRole"
+        );
 
 
     if (isLoggedIn) {
 
-        loginBtn.style.display = "none";
-        signupBtn.style.display = "none";
+        loginBtn.style.display =
+            "none";
 
-        logoutBtn.style.display = "inline-block";
-        userName.style.display = "inline-block";
+        signupBtn.style.display =
+            "none";
+
+
+        logoutBtn.style.display =
+            "inline-block";
+
+        userName.style.display =
+            "inline-block";
+
 
         userName.textContent =
             `Hi, ${currentUser}`;
 
+
+        console.log(
+            "Logged in role:",
+            role
+        );
+
+
     } else {
 
-        loginBtn.style.display = "inline-block";
-        signupBtn.style.display = "inline-block";
+        loginBtn.style.display =
+            "inline-block";
 
-        logoutBtn.style.display = "none";
-        userName.style.display = "none";
+        signupBtn.style.display =
+            "inline-block";
+
+
+        logoutBtn.style.display =
+            "none";
+
+        userName.style.display =
+            "none";
 
     }
 
 }
 
 
-// INITIALIZE
+// =========================================
+// INITIALIZE AUTH
+// =========================================
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
 
-    loginSection.style.display = "block";
-    signupSection.style.display = "none";
+        loginSection.style.display =
+            "block";
 
-    logoutBtn.style.display = "none";
-    userName.style.display = "none";
+        signupSection.style.display =
+            "none";
 
-    updateAuthUI();
 
-});
+        logoutBtn.style.display =
+            "none";
+
+        userName.style.display =
+            "none";
+
+
+        updateAuthUI();
+
+    }
+);
