@@ -627,9 +627,78 @@ function updateAuthUI() {
             "none";
 
     }
+    if (
+        role === "user" ||
+        role === "worker"
+    ) {
+
+        userName.style.cursor =
+            "pointer";
+
+        userName.title =
+            "Open Profile";
+
+    } else {
+
+        userName.style.cursor =
+            "default";
+
+        userName.removeAttribute(
+            "title"
+        );
+
+    }
+    const workerPanelLink =
+    document.getElementById(
+        "workerPanelLink"
+    );
+
+
+    if (workerPanelLink) {
+
+        const role =
+            localStorage.getItem(
+                "fixmycityRole"
+            );
+
+
+        if (role === "worker") {
+
+            workerPanelLink.style.display =
+                "inline-block";
+
+        } else {
+
+            workerPanelLink.style.display =
+                "none";
+
+        }
+
+    }
 
 }
+userName.addEventListener(
+    "click",
+    () => {
 
+        const role =
+            localStorage.getItem(
+                "fixmycityRole"
+            );
+
+
+        if (
+            role === "user" ||
+            role === "worker"
+        ) {
+
+            window.location.href =
+                "profile.html";
+
+        }
+
+    }
+);
 
 // =========================================
 // INITIALIZE AUTH

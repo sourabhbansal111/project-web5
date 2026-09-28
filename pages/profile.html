@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>My Profile | FixMyCity</title>
+
+    <link
+        rel="stylesheet"
+        href="../css/profile.css"
+    >
+
+</head>
+
+<body>
+
+
+    <!-- ============================= -->
+    <!-- NAVBAR -->
+    <!-- ============================= -->
+
+    <header class="profile-navbar">
+
+        <div class="profile-logo">
+
+            <div class="logo-icon">
+                F
+            </div>
+
+            <div>
+
+                <h2>
+                    FixMyCity
+                </h2>
+
+                <span>
+                    My Profile
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="profile-nav-actions">
+
+            <a href="dashboard.html">
+                Dashboard
+            </a>
+
+            <button id="profileLogout">
+                Logout
+            </button>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- ============================= -->
+    <!-- PROFILE -->
+    <!-- ============================= -->
+
+    <main class="profile-container">
+
+
+        <div class="profile-heading">
+
+            <p class="eyebrow">
+                ACCOUNT
+            </p>
+
+            <h1>
+                My Profile
+            </h1>
+
+            <p>
+                Manage your personal information and preferences.
+            </p>
+
+        </div>
+
+
+
+        <!-- ============================= -->
+        <!-- PROFILE CARD -->
+        <!-- ============================= -->
+
+        <section class="profile-card">
+
+
+            <div class="profile-top">
+
+                <div class="avatar">
+                    <span id="avatarLetter">
+                        U
+                    </span>
+                </div>
+
+
+                <div>
+
+                    <h2 id="profileDisplayName">
+                        User
+                    </h2>
+
+                    <span
+                        id="profileRole"
+                        class="role-badge"
+                    >
+                        User
+                    </span>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ============================= -->
+            <!-- PROFILE FORM -->
+            <!-- ============================= -->
+
+            <form id="profileForm">
+
+
+                <!-- BASIC INFORMATION -->
+
+                <div class="form-section">
+
+                    <h3>
+                        Basic Information
+                    </h3>
+
+
+                    <div class="form-grid">
+
+
+                        <div class="form-group">
+
+                            <label for="profileName">
+                                Full Name
+                            </label>
+
+                            <input
+                                type="text"
+                                id="profileName"
+                                required
+                            >
+
+                        </div>
+
+
+
+                        <div class="form-group">
+
+                            <label for="profileEmail">
+                                Email
+                            </label>
+
+                            <input
+                                type="email"
+                                id="profileEmail"
+                                readonly
+                            >
+
+                            <small>
+                                Email cannot be changed here.
+                            </small>
+
+                        </div>
+
+
+
+                        <div class="form-group">
+
+                            <label for="profilePhone">
+                                Phone
+                            </label>
+
+                            <input
+                                type="tel"
+                                id="profilePhone"
+                                placeholder="Enter phone number"
+                            >
+
+                        </div>
+
+
+
+                        <div class="form-group">
+
+                            <label for="profileDateOfBirth">
+                                Date of Birth
+                            </label>
+
+                            <input
+                                type="date"
+                                id="profileDateOfBirth"
+                            >
+
+                        </div>
+
+
+
+                        <div class="form-group">
+
+                            <label for="profileGender">
+                                Gender
+                            </label>
+
+                            <select id="profileGender">
+
+                                <option value="">
+                                    Select
+                                </option>
+
+                                <option value="Male">
+                                    Male
+                                </option>
+
+                                <option value="Female">
+                                    Female
+                                </option>
+
+                                <option value="Other">
+                                    Other
+                                </option>
+
+                                <option value="Prefer not to say">
+                                    Prefer not to say
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ADDRESS -->
+
+                <div class="form-section">
+
+                    <h3>
+                        Address
+                    </h3>
+
+
+                    <div class="form-grid">
+
+
+                        <div class="form-group full-width">
+
+                            <label for="profileAddress">
+                                Address
+                            </label>
+
+                            <textarea
+                                id="profileAddress"
+                                rows="3"
+                                placeholder="Enter your address"
+                            ></textarea>
+
+                        </div>
+
+
+
+                        <div class="form-group">
+
+                            <label for="profileCity">
+                                City
+                            </label>
+
+                            <input
+                                type="text"
+                                id="profileCity"
+                            >
+
+                        </div>
+
+
+
+                        <div class="form-group">
+
+                            <label for="profileState">
+                                State
+                            </label>
+
+                            <input
+                                type="text"
+                                id="profileState"
+                            >
+
+                        </div>
+
+
+
+                        <div class="form-group">
+
+                            <label for="profilePincode">
+                                Pincode
+                            </label>
+
+                            <input
+                                type="text"
+                                id="profilePincode"
+                            >
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- BIO -->
+
+                <div class="form-section">
+
+                    <h3>
+                        About You
+                    </h3>
+
+
+                    <div class="form-group">
+
+                        <label for="profileBio">
+                            Bio
+                        </label>
+
+                        <textarea
+                            id="profileBio"
+                            rows="4"
+                            maxlength="300"
+                            placeholder="Tell us something about yourself..."
+                        ></textarea>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- NOTIFICATIONS -->
+
+                <div class="form-section">
+
+                    <h3>
+                        Notifications
+                    </h3>
+
+
+                    <label class="checkbox-row">
+
+                        <input
+                            type="checkbox"
+                            id="notificationsEnabled"
+                        >
+
+                        <span>
+                            Enable notifications
+                        </span>
+
+                    </label>
+
+
+                    <label class="checkbox-row">
+
+                        <input
+                            type="checkbox"
+                            id="emailNotifications"
+                        >
+
+                        <span>
+                            Receive email notifications
+                        </span>
+
+                    </label>
+
+                </div>
+
+
+
+                <!-- ACTIONS -->
+
+                <div class="profile-actions">
+
+                    <a
+                        href="dashboard.html"
+                        class="cancel-btn"
+                    >
+                        Cancel
+                    </a>
+
+
+                    <button
+                        type="submit"
+                        class="save-btn"
+                    >
+                        Save Changes
+                    </button>
+
+                </div>
+
+
+                <p
+                    id="profileMessage"
+                    class="profile-message"
+                ></p>
+
+            </form>
+
+        </section>
+
+    </main>
+
+
+
+    <script src="../js/database.js"></script>
+
+    <script src="../js/profile.js"></script>
+
+</body>
+
+</html>

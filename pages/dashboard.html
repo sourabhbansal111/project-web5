@@ -139,93 +139,101 @@
 
     <header class="navbar">
 
-        <div class="logo">
+    <!-- LOGO -->
+    <div class="logo">
 
-            <div class="logo-icon">
-                F
-            </div>
+        <div class="logo-icon">F</div>
 
-            <div class="logo-text">
-
-                <h2>FixMyCity</h2>
-
-                <span>
-                    Report. Track. Resolve.
-                </span>
-
-            </div>
-
+        <div class="logo-text">
+            <h2>FixMyCity</h2>
+            <span>Report. Track. Resolve.</span>
         </div>
 
-
-        <nav>
-
-            <a href="#" class="active">
-                Dashboard
-            </a>
-
-            <a href="#">
-                Report Issue
-            </a>
-
-            <a href="#">
-                Track Complaint
-            </a>
-
-            <a href="#">
-                About
-            </a>
-
-        </nav>
+    </div>
 
 
-        <div class="auth-actions">
+    <!-- MAIN NAVIGATION -->
+    <nav class="main-nav">
 
-            <!-- Shown when logged out -->
+        <a href="dashboard.html" class="active">
+            Dashboard
+        </a>
 
-            <button
-                id="loginBtn"
-                class="login-btn"
-            >
-                Login
-            </button>
+        <a href="#" id="reportIssueNav">
+            Report Issue
+        </a>
 
-            <button
-                id="signupBtn"
-                class="signup-btn"
-            >
-                Sign Up
-            </button>
+        <a href="#" id="trackComplaintNav">
+            Track Complaint
+        </a>
+
+        <a href="#" id="aboutNav">
+            About
+        </a>
+
+    </nav>
 
 
-            <!-- Shown when logged in -->
+    <!-- AUTH AREA -->
+    <div class="auth-actions">
 
-            <span
-                id="userName"
-                class="user-name"
-            ></span>
-            <a
-                href="admin.html"
-                id="adminPanelLink"
-                style="display: none;"
-            >
-                Admin Panel
-            </a>
+        <!-- Logged out -->
 
-            <button
-                id="logoutBtn"
-                class="logout-btn"
-            >
-                Logout
-            </button>
+        <button
+            id="loginBtn"
+            class="login-btn"
+        >
+            Login
+        </button>
 
-            <button class="report-btn">
-                + Report Issue
-            </button>
+        <button
+            id="signupBtn"
+            class="signup-btn"
+        >
+            Sign Up
+        </button>
 
-        </div>
 
-    </header>
+        <!-- Logged in -->
+
+        <span
+            id="userName"
+            class="user-name"
+            style="display: none;"
+        ></span>
+
+
+        <a
+            href="admin.html"
+            id="adminPanelLink"
+            class="role-link"
+            style="display: none;"
+        >
+            Admin Panel
+        </a>
+
+
+        <a
+            href="worker.html"
+            id="workerPanelLink"
+            class="role-link"
+            style="display: none;"
+        >
+            Worker Panel
+        </a>
+
+
+        <button
+            id="logoutBtn"
+            class="logout-btn"
+            style="display: none;"
+        >
+            Logout
+        </button>
+
+    </div>
+
+</header>
 
     <!-- ================= HERO ================= -->
 

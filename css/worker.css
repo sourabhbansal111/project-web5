@@ -1,0 +1,451 @@
+/* =========================================
+   FIXMYCITY
+   WORKER PANEL
+   ========================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+body {
+    font-family: Arial, sans-serif;
+
+    background: #f8fafc;
+
+    color: #1e293b;
+}
+
+
+/* =========================================
+   NAVBAR
+   ========================================= */
+
+.worker-navbar {
+    min-height: 72px;
+
+    padding: 0 6%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    background: white;
+
+    border-bottom: 1px solid #e2e8f0;
+}
+
+
+.worker-logo {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+}
+
+
+.logo-icon {
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 9px;
+
+    background: #2563eb;
+
+    color: white;
+
+    font-size: 20px;
+
+    font-weight: 700;
+}
+
+
+.worker-logo h2 {
+    font-size: 19px;
+}
+
+
+.worker-logo span {
+    font-size: 11px;
+
+    color: #64748b;
+}
+
+
+/* =========================================
+   NAVIGATION
+   ========================================= */
+
+.worker-nav {
+    display: flex;
+
+    align-items: center;
+
+    gap: 20px;
+}
+
+
+.worker-nav a {
+    color: #475569;
+
+    text-decoration: none;
+
+    font-size: 14px;
+
+    font-weight: 600;
+}
+
+
+.worker-nav a:hover {
+    color: #2563eb;
+}
+
+
+.worker-nav button {
+    padding: 8px 14px;
+
+    border: 1px solid #dc2626;
+
+    border-radius: 7px;
+
+    background: white;
+
+    color: #dc2626;
+
+    cursor: pointer;
+}
+
+
+.worker-nav button:hover {
+    background: #fef2f2;
+}
+
+
+/* =========================================
+   MAIN CONTAINER
+   ========================================= */
+
+.worker-container {
+    width: 90%;
+
+    max-width: 1100px;
+
+    margin: 40px auto 70px;
+}
+
+
+/* =========================================
+   HEADER
+   ========================================= */
+
+.worker-header {
+    margin-bottom: 30px;
+}
+
+
+.eyebrow {
+    margin-bottom: 7px;
+
+    color: #2563eb;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    letter-spacing: 1px;
+}
+
+
+.worker-header h1 {
+    margin-bottom: 8px;
+
+    font-size: 32px;
+}
+
+
+.worker-header h1 span {
+    color: #2563eb;
+}
+
+
+.worker-header > div > p:last-child {
+    color: #64748b;
+
+    font-size: 14px;
+}
+
+
+/* =========================================
+   STATISTICS
+   ========================================= */
+
+.worker-stats {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 15px;
+
+    margin-bottom: 25px;
+}
+
+
+.stat-card {
+    padding: 22px;
+
+    background: white;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 12px;
+}
+
+
+.stat-label {
+    display: block;
+
+    margin-bottom: 10px;
+
+    color: #64748b;
+
+    font-size: 13px;
+
+    font-weight: 600;
+}
+
+
+.stat-card strong {
+    font-size: 28px;
+
+    color: #1e293b;
+}
+
+
+/* =========================================
+   CARD
+   ========================================= */
+
+.worker-card {
+    margin-bottom: 25px;
+
+    padding: 25px;
+
+    background: white;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 12px;
+}
+
+
+.section-heading {
+    margin-bottom: 22px;
+}
+
+
+.section-heading h2 {
+    margin-bottom: 6px;
+
+    font-size: 20px;
+}
+
+
+.section-heading > div > p:last-child {
+    color: #64748b;
+
+    font-size: 14px;
+}
+
+
+/* =========================================
+   EMPTY STATE
+   ========================================= */
+
+.empty-state {
+    padding: 55px 20px;
+
+    text-align: center;
+
+    border: 1px dashed #cbd5e1;
+
+    border-radius: 10px;
+}
+
+
+.empty-icon {
+    width: 48px;
+    height: 48px;
+
+    margin: 0 auto 15px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+    font-size: 22px;
+
+    font-weight: 700;
+}
+
+
+.empty-state h3 {
+    margin-bottom: 7px;
+
+    font-size: 16px;
+}
+
+
+.empty-state p {
+    color: #94a3b8;
+
+    font-size: 13px;
+}
+
+
+/* =========================================
+   WORKER INFORMATION
+   ========================================= */
+
+.worker-info-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 15px;
+
+    margin-bottom: 20px;
+}
+
+
+.info-item {
+    padding: 15px;
+
+    background: #f8fafc;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 8px;
+}
+
+
+.info-item span {
+    display: block;
+
+    margin-bottom: 6px;
+
+    color: #64748b;
+
+    font-size: 12px;
+}
+
+
+.info-item strong {
+    font-size: 14px;
+}
+
+
+.active-status {
+    color: #16a34a;
+}
+
+
+/* =========================================
+   PROFILE BUTTON
+   ========================================= */
+
+.profile-button {
+    display: inline-block;
+
+    padding: 10px 16px;
+
+    border-radius: 7px;
+
+    background: #2563eb;
+
+    color: white;
+
+    text-decoration: none;
+
+    font-size: 13px;
+
+    font-weight: 600;
+}
+
+
+.profile-button:hover {
+    background: #1d4ed8;
+}
+
+
+/* =========================================
+   RESPONSIVE
+   ========================================= */
+
+@media (max-width: 800px) {
+
+    .worker-stats {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .worker-navbar {
+        padding: 15px 5%;
+    }
+
+
+    .worker-nav {
+        gap: 10px;
+    }
+
+
+    .worker-nav a {
+        display: none;
+    }
+
+
+    .worker-container {
+        width: 92%;
+
+        margin-top: 25px;
+    }
+
+
+    .worker-header h1 {
+        font-size: 27px;
+    }
+
+
+    .worker-stats {
+        grid-template-columns: 1fr;
+    }
+
+
+    .worker-info-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
