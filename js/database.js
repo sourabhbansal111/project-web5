@@ -4,7 +4,7 @@
 // =========================================
 
 const DB_NAME = "FixMyCityDB";
-const DB_VERSION = 2;
+const DB_VERSION = 3;
 
 let db;
 
@@ -613,6 +613,45 @@ async function removeWorker(workerId) {
     await updateUser(worker);
 
     return worker;
+
+}
+function addComplaint(complaint) {
+
+    return new Promise(
+        (resolve, reject) => {
+
+            const transaction =
+                db.transaction(
+                    ["complaints"],
+                    "readwrite"
+                );
+
+            const store =
+                transaction.objectStore(
+                    "complaints"
+                );
+
+            const request =
+                store.add(complaint);
+
+            request.onsuccess = () => {
+
+                resolve(
+                    request.result
+                );
+
+            };
+
+            request.onerror = () => {
+
+                reject(
+                    request.error
+                );
+
+            };
+
+        }
+    );
 
 }
 
