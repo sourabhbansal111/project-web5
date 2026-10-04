@@ -10,8 +10,11 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>FixMyCity | City Dashboard</title>
-
+    <title>FixMyCity | Track Complaints</title>
+<link
+        rel="stylesheet"
+        href="../css/track.css"
+    >
     <link
         rel="stylesheet"
         href="../css/dashboard.css"
@@ -155,7 +158,7 @@
     <!-- MAIN NAVIGATION -->
     <nav class="main-nav">
 
-        <a href="dashboard.html" class="active">
+        <a href="dashboard.html" >
             Dashboard
         </a>
 
@@ -163,7 +166,7 @@
             Report Issue
         </a>
 
-        <a href="track.html" id="trackComplaintNav">
+        <a href="track.html" id="trackComplaintNav" class="active">
             Track Complaint
         </a>
 
@@ -236,221 +239,37 @@
 </header>
 
     <!-- ================= HERO ================= -->
+    <main class="track-page">
 
-    <main>
+    <section class="track-header">
 
-        <section class="hero">
+        <h1>
+            Track Your Complaints
+        </h1>
 
-            <div class="hero-text">
+        <p>
+            View the current status of your reported issues.
+        </p>
 
-                <span class="section-label">
-                    CITY OVERVIEW
-                </span>
+    </section>
 
-                <h1>
-                    What's happening in your city?
-                </h1>
 
-                <p>
-                    Track civic issues reported by citizens
-                    and see how your city is responding.
-                </p>
+    <section
+        id="complaintsContainer"
+        class="track-container"
+    >
 
-            </div>
+        <p class="empty-message">
+            Loading your complaints...
+        </p>
 
+    </section>
 
-            <div class="last-updated">
+</main>
 
-                <span>
-                    Last updated
-                </span>
 
-                <strong id="lastUpdated">
-                    —
-                </strong>
 
-            </div>
-
-        </section>
-
-
-        <!-- ================= STATISTICS ================= -->
-
-        <section class="stats">
-
-            <div class="stat-card">
-
-                <div class="stat-header">
-
-                    <span class="stat-title">
-                        Total Reports
-                    </span>
-
-                    <span class="stat-icon">
-                        📋
-                    </span>
-
-                </div>
-
-                <strong
-                    class="stat-value"
-                    id="totalReports"
-                >
-                    0
-                </strong>
-
-                <span class="stat-change">
-                    Reports submitted to date
-                </span>
-
-            </div>
-
-
-            <div class="stat-card">
-
-                <div class="stat-header">
-
-                    <span class="stat-title">
-                        Resolved
-                    </span>
-
-                    <span class="stat-icon">
-                        ✅
-                    </span>
-
-                </div>
-
-                <strong
-                    class="stat-value"
-                    id="resolvedReports"
-                >
-                    0
-                </strong>
-
-                <span class="stat-change">
-                    Issues successfully fixed
-                </span>
-
-            </div>
-
-
-            <div class="stat-card">
-
-                <div class="stat-header">
-
-                    <span class="stat-title">
-                        In Progress
-                    </span>
-
-                    <span class="stat-icon">
-                        🔧
-                    </span>
-
-                </div>
-
-                <strong
-                    class="stat-value"
-                    id="progressReports"
-                >
-                    0
-                </strong>
-
-                <span class="stat-change">
-                    Under review or being handled
-                </span>
-
-            </div>
-
-
-            <div class="stat-card">
-
-                <div class="stat-header">
-
-                    <span class="stat-title">
-                        Pending
-                    </span>
-
-                    <span class="stat-icon">
-                        ⏳
-                    </span>
-
-                </div>
-
-                <strong
-                    class="stat-value"
-                    id="pendingReports"
-                >
-                    0
-                </strong>
-
-                <span class="stat-change">
-                    Awaiting review
-                </span>
-
-            </div>
-
-        </section>
-
-
-        <!-- ================= DASHBOARD ================= -->
-
-        <section class="dashboard-grid">
-
-
-            <!-- CATEGORY PANEL -->
-
-            <div class="panel">
-
-                <div class="panel-header">
-
-                    <h2>
-                        Issues by Category
-                    </h2>
-
-                    <button
-                        class="view-all"
-                        type="button"
-                    >
-                        View all →
-                    </button>
-
-                </div>
-
-
-                <div id="categoryContainer">
-
-                    <!-- Generated by JavaScript -->
-
-                </div>
-
-            </div>
-
-
-            <!-- STATUS PANEL -->
-
-            <div class="panel">
-
-                <div class="panel-header">
-
-                    <h2>
-                        Complaint Status
-                    </h2>
-
-                </div>
-
-
-                <div id="statusContainer">
-
-                    <!-- Generated by JavaScript -->
-
-                </div>
-
-            </div>
-
-        </section>
-
-    </main>
-
+   
 
     <!-- ================= FOOTER ================= -->
 
@@ -469,9 +288,10 @@
 
     <!-- ================= JAVASCRIPT ================= -->
 
+
     <script src="../js/database.js"></script>
-    <script src="../js/dashboard.js"></script>
     <script src="../js/auth.js"></script>
+    <script src="../js/track.js"></script>
 
 </body>
 

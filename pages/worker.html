@@ -74,248 +74,126 @@
     <!-- MAIN -->
     <!-- ================================= -->
 
-    <main class="worker-container">
+    <main class="worker-page">
+
+    <!-- HEADER -->
+    <section class="worker-header">
+
+        <div>
+            <span class="page-label">
+                WORKER PANEL
+            </span>
+
+            <h1>
+                Welcome, <span id="workerName">Worker</span>
+            </h1>
+
+            <p>
+                Manage and resolve the civic issues assigned to you.
+            </p>
+        </div>
+
+    </section>
 
 
-        <!-- ================================= -->
-        <!-- HEADER -->
-        <!-- ================================= -->
+    <!-- STATS -->
+    <section class="worker-stats">
 
-        <section class="worker-header">
+        <div class="stat-card">
+
+            <span class="stat-label">
+                Assigned
+            </span>
+
+            <strong id="assignedCount">
+                0
+            </strong>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <span class="stat-label">
+                Under Review
+            </span>
+
+            <strong id="reviewCount">
+                0
+            </strong>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <span class="stat-label">
+                In Progress
+            </span>
+
+            <strong id="progressCount">
+                0
+            </strong>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <span class="stat-label">
+                Resolved
+            </span>
+
+            <strong id="resolvedCount">
+                0
+            </strong>
+
+        </div>
+
+    </section>
+
+
+    <!-- COMPLAINTS -->
+    <section class="assigned-section">
+
+        <div class="section-header">
 
             <div>
 
-                <p class="eyebrow">
-                    WORKER DASHBOARD
-                </p>
-
-                <h1>
-                    Welcome,
-                    <span id="workerName">
-                        Worker
-                    </span>
-                </h1>
+                <h2>
+                    Assigned Complaints
+                </h2>
 
                 <p>
-                    Manage and resolve complaints assigned to you.
+                    Complaints assigned to you by the administrator.
                 </p>
 
             </div>
 
-        </section>
-
-
-
-        <!-- ================================= -->
-        <!-- STATISTICS -->
-        <!-- ================================= -->
-
-        <section class="worker-stats">
-
-
-            <div class="stat-card">
-
-                <span class="stat-label">
-                    Assigned
-                </span>
-
-                <strong id="assignedCount">
-                    0
-                </strong>
-
-            </div>
-
-
-            <div class="stat-card">
-
-                <span class="stat-label">
-                    In Progress
-                </span>
-
-                <strong id="progressCount">
-                    0
-                </strong>
-
-            </div>
-
-
-            <div class="stat-card">
-
-                <span class="stat-label">
-                    Pending
-                </span>
-
-                <strong id="pendingCount">
-                    0
-                </strong>
-
-            </div>
-
-
-            <div class="stat-card">
-
-                <span class="stat-label">
-                    Resolved
-                </span>
-
-                <strong id="resolvedCount">
-                    0
-                </strong>
-
-            </div>
-
-        </section>
-
-
-
-        <!-- ================================= -->
-        <!-- ASSIGNED COMPLAINTS -->
-        <!-- ================================= -->
-
-        <section class="worker-card">
-
-
-            <div class="section-heading">
-
-                <div>
-
-                    <p class="eyebrow">
-                        WORK
-                    </p>
-
-                    <h2>
-                        Assigned Complaints
-                    </h2>
-
-                    <p>
-                        Complaints assigned to you will appear here.
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div
-                id="complaintList"
-                class="complaint-list"
+            <button
+                id="refreshComplaintsBtn"
+                class="refresh-btn"
             >
+                Refresh
+            </button>
 
-                <div class="empty-state">
-
-                    <div class="empty-icon">
-                        ✓
-                    </div>
-
-                    <h3>
-                        No complaints assigned
-                    </h3>
-
-                    <p>
-                        New complaints assigned to you
-                        will appear here.
-                    </p>
-
-                </div>
-
-            </div>
-
-        </section>
+        </div>
 
 
+        <div
+            id="complaintsContainer"
+            class="complaints-container"
+        >
 
-        <!-- ================================= -->
-        <!-- WORKER INFORMATION -->
-        <!-- ================================= -->
+            <p class="empty-message">
+                Loading complaints...
+            </p>
 
-        <section class="worker-card">
+        </div>
 
+    </section>
 
-            <div class="section-heading">
-
-                <div>
-
-                    <p class="eyebrow">
-                        ACCOUNT
-                    </p>
-
-                    <h2>
-                        Worker Information
-                    </h2>
-
-                </div>
-
-            </div>
-
-
-            <div class="worker-info-grid">
-
-
-                <div class="info-item">
-
-                    <span>
-                        Name
-                    </span>
-
-                    <strong id="infoName">
-                        -
-                    </strong>
-
-                </div>
-
-
-                <div class="info-item">
-
-                    <span>
-                        Email
-                    </span>
-
-                    <strong id="infoEmail">
-                        -
-                    </strong>
-
-                </div>
-
-
-                <div class="info-item">
-
-                    <span>
-                        Role
-                    </span>
-
-                    <strong>
-                        Worker
-                    </strong>
-
-                </div>
-
-
-                <div class="info-item">
-
-                    <span>
-                        Account Status
-                    </span>
-
-                    <strong class="active-status">
-                        Active
-                    </strong>
-
-                </div>
-
-            </div>
-
-
-            <a
-                href="profile.html"
-                class="profile-button"
-            >
-                Edit Profile
-            </a>
-
-        </section>
-
-
-    </main>
+</main>
 
 
     <script src="../js/database.js"></script>

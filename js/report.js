@@ -116,7 +116,7 @@ function loadUserName() {
         );
 
 
-    if (name) {
+    if (name && reportUserName) {
 
         reportUserName.textContent =
             name;
@@ -695,15 +695,16 @@ reportForm.addEventListener(
                 address,
 
             latitude:
-                latitude,
+                Number.isFinite(latitude)
+                    ? latitude
+                    : null,
 
             longitude:
-                longitude,
+                Number.isFinite(longitude)
+                    ? longitude
+                    : null,
 
-            image:
-                issueImage.files[0]
-                ? issueImage.files[0].name
-                : null,
+            image: null,
 
             status:
                 "Submitted",
@@ -716,6 +717,12 @@ reportForm.addEventListener(
         try {
 
             await window.dbReady;
+
+            if (issueImage.files[0]) {
+                complaint.image = await readFileAsDataUrl(
+                    issueImage.files[0]
+                );
+            }
 
             const complaintId =
                 await addComplaint(
@@ -738,7 +745,12 @@ reportForm.addEventListener(
             issueLocation.dataset.location =
                 "";
 
+            delete issueLocation.dataset.latitude;
+            delete issueLocation.dataset.longitude;
+
             imagePreview.innerHTML = "";
+            imagePreview.style.display = "none";
+            characterCount.textContent = "0";
 
             locationStatus.textContent =
                 "";
@@ -763,6 +775,15 @@ reportForm.addEventListener(
 // =========================================
 // MESSAGE FUNCTION
 // =========================================
+
+function readFileAsDataUrl(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = () => reject(reader.error);
+        reader.readAsDataURL(file);
+    });
+}
 
 function showMessage(
     message,
@@ -805,3 +826,8 @@ document.addEventListener(
 
     }
 );
+
+issueLocation.addEventListener("input", () => {
+    delete issueLocation.dataset.latitude;
+    delete issueLocation.dataset.longitude;
+});

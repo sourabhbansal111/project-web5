@@ -45,12 +45,15 @@ const adminLogout =
 
 function checkAdminAccess() {
 
+    const isLoggedIn =
+        localStorage.getItem("fixmycityLoggedIn") === "true";
+
     const role =
         localStorage.getItem(
             "fixmycityRole"
         );
 
-    if (role !== "admin") {
+    if (!isLoggedIn || role !== "admin") {
 
         alert(
             "Access denied. Admin only."
@@ -117,11 +120,11 @@ function renderUsers(users) {
             <div class="user-info">
 
                 <h3>
-                    ${user.name}
+                    ${escapeHtml(user.name)}
                 </h3>
 
                 <p>
-                    ${user.email}
+                    ${escapeHtml(user.email)}
                 </p>
 
                 <span class="role-badge">
@@ -191,11 +194,11 @@ function renderWorkers(users) {
             <div class="user-info">
 
                 <h3>
-                    ${worker.name}
+                    ${escapeHtml(worker.name)}
                 </h3>
 
                 <p>
-                    ${worker.email}
+                    ${escapeHtml(worker.email)}
                 </p>
 
                 <span class="role-badge">
@@ -444,6 +447,8 @@ document.addEventListener(
 
             await loadUsers();
 
+            await loadComplaints();
+
         } catch (error) {
 
             console.error(
@@ -455,3 +460,329 @@ document.addEventListener(
 
     }
 );
+
+document
+    .getElementById(
+        "refreshComplaintsBtn"
+    )
+    ?.addEventListener(
+        "click",
+        loadComplaints
+    );
+
+// =========================================
+// LOAD COMPLAINTS
+// =========================================
+
+async function loadComplaints() {
+
+    const container =
+        document.getElementById(
+            "complaintsContainer"
+        );
+
+    if (!container) {
+        return;
+    }
+
+    try {
+
+        await window.dbReady;
+
+        const complaints =
+            await getAllComplaints();
+
+        const workers =
+            await getAllWorkers();
+
+        if (complaints.length === 0) {
+
+            container.innerHTML = `
+                <p class="empty-message">
+                    No complaints have been reported yet.
+                </p>
+            `;
+
+            return;
+        }
+
+        container.innerHTML = "";
+
+        for (const complaint of complaints) {
+
+            const user =
+                await getUserById(
+                    complaint.userId
+                );
+
+            const worker =
+                complaint.workerId
+                    ? await getUserById(
+                        complaint.workerId
+                    )
+                    : null;
+
+            const card =
+                document.createElement("div");
+
+            card.className =
+                "complaint-card";
+
+            card.innerHTML = `
+
+                ${complaint.image ? `
+                    <img
+                        class="complaint-photo"
+                        src="${escapeHtml(complaint.image)}"
+                        alt="Reported issue"
+                    >
+                ` : ""}
+
+                <div class="complaint-header">
+
+                    <div>
+
+                        <h3>
+                            ${escapeHtml(
+                                complaint.title
+                            )}
+                        </h3>
+
+                        <div class="complaint-category">
+
+                            ${escapeHtml(
+                                complaint.category
+                            )}
+
+                        </div>
+
+                    </div>
+
+                    <span class="complaint-status">
+
+                        ${escapeHtml(
+                            complaint.status
+                        )}
+
+                    </span>
+
+                </div>
+
+
+                <div class="complaint-details">
+
+                    <p>
+                        <strong>Complaint ID:</strong>
+                        #${complaint.id}
+                    </p>
+
+                    <p>
+                        <strong>Reported By:</strong>
+                        ${escapeHtml(
+                            user?.name || "Unknown User"
+                        )}
+                    </p>
+
+                    <p>
+                        <strong>Description:</strong>
+                        ${escapeHtml(
+                            complaint.description
+                        )}
+                    </p>
+
+                    <p>
+                        <strong>Location:</strong>
+                        ${escapeHtml(
+                            complaint.location
+                        )}
+                    </p>
+
+                    <p>
+                        <strong>Submitted:</strong>
+                        ${formatDate(
+                            complaint.createdAt
+                        )}
+                    </p>
+
+                </div>
+
+
+                <div class="assigned-worker">
+
+                    <strong>Assigned Worker:</strong>
+
+                    ${
+                        worker
+                            ? escapeHtml(worker.name)
+                            : "Not assigned"
+                    }
+
+                </div>
+
+
+                <div class="assign-area">
+
+                    <select
+                        class="worker-select"
+                        data-complaint-id="${complaint.id}"
+                    >
+
+                        <option value="">
+                            Select Worker
+                        </option>
+
+                        ${workers.map(
+                            worker => `
+                                <option
+                                    value="${worker.id}"
+                                    ${
+                                        complaint.workerId ==
+                                        worker.id
+                                            ? "selected"
+                                            : ""
+                                    }
+                                >
+                                    ${escapeHtml(
+                                        worker.name
+                                    )}
+                                </option>
+                            `
+                        ).join("")}
+
+                    </select>
+
+                    <button
+                        class="assign-btn"
+                        data-complaint-id="${complaint.id}"
+                    >
+                        Assign
+                    </button>
+
+                </div>
+
+            `;
+
+            container.appendChild(card);
+
+        }
+
+        attachAssignmentHandlers();
+
+    } catch (error) {
+
+        console.error(
+            "Unable to load complaints:",
+            error
+        );
+
+        container.innerHTML = `
+            <p class="empty-message">
+                Unable to load complaints.
+            </p>
+        `;
+
+    }
+
+}
+
+// =========================================
+// ASSIGNMENT HANDLERS
+// =========================================
+
+function attachAssignmentHandlers() {
+
+    const buttons =
+        document.querySelectorAll(
+            ".assign-btn"
+        );
+
+    buttons.forEach(button => {
+
+        button.addEventListener(
+            "click",
+            async () => {
+
+                const complaintId =
+                    button.dataset.complaintId;
+
+                const select =
+                    document.querySelector(
+                        `.worker-select[data-complaint-id="${complaintId}"]`
+                    );
+
+                const workerId =
+                    select.value;
+
+                if (!workerId) {
+
+                    alert(
+                        "Please select a worker."
+                    );
+
+                    return;
+
+                }
+
+                try {
+
+                    await assignWorker(
+                        complaintId,
+                        workerId
+                    );
+
+                    alert(
+                        "Worker assigned successfully."
+                    );
+
+                    await loadComplaints();
+
+                } catch (error) {
+
+                    console.error(
+                        error
+                    );
+
+                    alert(
+                        "Unable to assign worker."
+                    );
+
+                }
+
+            }
+        );
+
+    });
+
+}
+
+function formatDate(dateString) {
+
+    if (!dateString) {
+        return "Unknown";
+    }
+
+    return new Date(
+        dateString
+    ).toLocaleString();
+
+}
+
+
+function escapeHtml(value) {
+
+    if (value === null ||
+        value === undefined) {
+
+        return "";
+
+    }
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+

@@ -6,151 +6,27 @@
 * {
     margin: 0;
     padding: 0;
-
     box-sizing: border-box;
 }
 
 
+html {
+    scroll-behavior: smooth;
+}
+
+
 body {
-    font-family: Arial, sans-serif;
 
-    background: #f8fafc;
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
 
-    color: #1e293b;
+    background: #f5f7fb;
+
+    color: #172033;
 }
 
-
-/* =========================================
-   NAVBAR
-   ========================================= */
-
-.report-navbar {
-    width: 100%;
-
-    min-height: 78px;
-
-    padding: 0 6%;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    background: white;
-
-    border-bottom: 1px solid #e2e8f0;
-
-    box-shadow:
-        0 2px 8px rgba(15, 23, 42, 0.04);
-}
-
-
-.report-logo {
-    display: flex;
-
-    align-items: center;
-
-    gap: 12px;
-}
-
-
-.logo-icon {
-    width: 42px;
-    height: 42px;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 10px;
-
-    background: #2563eb;
-
-    color: white;
-
-    font-size: 21px;
-
-    font-weight: 700;
-}
-
-
-.logo-text h2 {
-    font-size: 19px;
-}
-
-
-.logo-text span {
-    display: block;
-
-    margin-top: 3px;
-
-    color: #64748b;
-
-    font-size: 10px;
-}
-
-
-.report-navbar nav {
-    display: flex;
-
-    align-items: center;
-
-    gap: 30px;
-}
-
-
-.report-navbar nav a {
-    color: #64748b;
-
-    text-decoration: none;
-
-    font-size: 14px;
-
-    font-weight: 500;
-}
-
-
-.report-navbar nav a:hover {
-    color: #2563eb;
-}
-
-
-.report-navbar nav a.active {
-    color: #2563eb;
-
-    font-weight: 600;
-}
-
-
-.report-nav-user {
-    display: flex;
-
-    align-items: center;
-
-    gap: 15px;
-}
-
-
-.report-nav-user span {
-    color: #0f172a;
-
-    font-size: 14px;
-
-    font-weight: 600;
-}
-
-
-.report-nav-user a {
-    color: #2563eb;
-
-    text-decoration: none;
-
-    font-size: 13px;
-
-    font-weight: 600;
-}
 
 
 /* =========================================
@@ -170,7 +46,7 @@ body {
    HEADER
    ========================================= */
 
-.report-header {
+/* .report-header {
     margin-bottom: 28px;
 }
 
@@ -201,7 +77,7 @@ body {
     color: #64748b;
 
     font-size: 15px;
-}
+} */
 
 
 /* =========================================

@@ -1,0 +1,85 @@
+.track-page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 50px 20px;
+}
+
+.track-header {
+    margin-bottom: 30px;
+}
+
+.track-header h1 {
+    margin-bottom: 8px;
+}
+
+.track-header p {
+    color: #777;
+}
+
+.track-container {
+    display: grid;
+    gap: 20px;
+}
+
+.track-card {
+    background: white;
+    padding: 25px;
+    border-radius: 14px;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+}
+
+.track-card h2 {
+    margin-top: 0;
+}
+
+.track-photo {
+    display: block;
+    width: 100%;
+    max-height: 300px;
+    margin-bottom: 18px;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+.track-info {
+    line-height: 1.7;
+}
+
+.status-timeline {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+    position: relative;
+}
+
+.status-step {
+    text-align: center;
+    flex: 1;
+    position: relative;
+}
+
+.status-dot {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #ddd;
+    margin: 0 auto 8px;
+}
+
+.status-step.active .status-dot {
+    background: #2563eb;
+}
+
+.status-step.completed .status-dot {
+    background: #16a34a;
+}
+
+.status-step span {
+    font-size: 13px;
+}
+
+.empty-message {
+    text-align: center;
+    padding: 40px;
+    color: #777;
+}

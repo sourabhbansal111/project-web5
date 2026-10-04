@@ -7,6 +7,7 @@ const DB_NAME = "FixMyCityDB";
 const DB_VERSION = 3;
 
 let db;
+let databasePromise;
 
 
 // =========================================
@@ -30,7 +31,11 @@ const ADMIN_ACCOUNT = {
 
 function openDatabase() {
 
-    return new Promise((resolve, reject) => {
+    if (databasePromise) {
+        return databasePromise;
+    }
+
+    databasePromise = new Promise((resolve, reject) => {
 
         const request = indexedDB.open(
             DB_NAME,
@@ -277,6 +282,8 @@ function openDatabase() {
         };
 
     });
+
+    return databasePromise;
 
 }
 
@@ -654,12 +661,349 @@ function addComplaint(complaint) {
     );
 
 }
-
-
 // =========================================
-// INITIALIZE
+// GET ALL COMPLAINTS
 // =========================================
 
+function getAllComplaints() {
 
+    return new Promise((resolve, reject) => {
 
+        const transaction =
+            db.transaction(
+                "complaints",
+                "readonly"
+            );
+
+        const store =
+            transaction.objectStore(
+                "complaints"
+            );
+
+        const request =
+            store.getAll();
+
+        request.onsuccess = () => {
+
+            resolve(
+                request.result
+            );
+
+        };
+
+        request.onerror = () => {
+
+            reject(
+                request.error
+            );
+
+        };
+
+    });
+
+}
+
+// =========================================
+// GET COMPLAINTS BY USER
+// =========================================
+
+function getComplaintsByUserId(userId) {
+
+    return new Promise((resolve, reject) => {
+
+        const transaction =
+            db.transaction(
+                "complaints",
+                "readonly"
+            );
+
+        const store =
+            transaction.objectStore(
+                "complaints"
+            );
+
+        const index =
+            store.index("userId");
+
+        const request =
+            index.getAll(
+                Number(userId)
+            );
+
+        request.onsuccess = () => {
+
+            resolve(
+                request.result
+            );
+
+        };
+
+        request.onerror = () => {
+
+            reject(
+                request.error
+            );
+
+        };
+
+    });
+
+}
+
+// =========================================
+// GET ALL WORKERS
+// =========================================
+
+function getAllWorkers() {
+
+    return new Promise((resolve, reject) => {
+
+        const transaction =
+            db.transaction(
+                "users",
+                "readonly"
+            );
+
+        const store =
+            transaction.objectStore(
+                "users"
+            );
+
+        const index =
+            store.index("role");
+
+        const request =
+            index.getAll("worker");
+
+        request.onsuccess = () => {
+
+            resolve(
+                request.result
+            );
+
+        };
+
+        request.onerror = () => {
+
+            reject(
+                request.error
+            );
+
+        };
+
+    });
+
+}
+
+// =========================================
+// ASSIGN WORKER TO COMPLAINT
+// =========================================
+
+function assignWorker(
+    complaintId,
+    workerId
+) {
+
+    return new Promise((resolve, reject) => {
+
+        const transaction =
+            db.transaction(
+                "complaints",
+                "readwrite"
+            );
+
+        const store =
+            transaction.objectStore(
+                "complaints"
+            );
+
+        const request =
+            store.get(
+                Number(complaintId)
+            );
+
+        request.onsuccess = () => {
+
+            const complaint =
+                request.result;
+
+            if (!complaint) {
+
+                reject(
+                    new Error(
+                        "Complaint not found."
+                    )
+                );
+
+                return;
+
+            }
+
+            complaint.workerId =
+                Number(workerId);
+
+            complaint.status =
+                "Under Review";
+
+            complaint.updatedAt =
+                new Date().toISOString();
+
+            const updateRequest =
+                store.put(complaint);
+
+            updateRequest.onsuccess = () => {
+
+                resolve(
+                    complaint
+                );
+
+            };
+
+            updateRequest.onerror = () => {
+
+                reject(
+                    updateRequest.error
+                );
+
+            };
+
+        };
+
+        request.onerror = () => {
+
+            reject(
+                request.error
+            );
+
+        };
+
+    });
+
+}
+
+// =========================================
+// UPDATE COMPLAINT STATUS
+// =========================================
+
+function updateComplaintStatus(
+    complaintId,
+    status
+) {
+
+    return new Promise((resolve, reject) => {
+
+        const transaction =
+            db.transaction(
+                "complaints",
+                "readwrite"
+            );
+
+        const store =
+            transaction.objectStore(
+                "complaints"
+            );
+
+        const request =
+            store.get(
+                Number(complaintId)
+            );
+
+        request.onsuccess = () => {
+
+            const complaint =
+                request.result;
+
+            if (!complaint) {
+
+                reject(
+                    new Error(
+                        "Complaint not found."
+                    )
+                );
+
+                return;
+
+            }
+
+            complaint.status =
+                status;
+
+            complaint.updatedAt =
+                new Date().toISOString();
+
+            const updateRequest =
+                store.put(complaint);
+
+            updateRequest.onsuccess = () => {
+
+                resolve(
+                    complaint
+                );
+
+            };
+
+            updateRequest.onerror = () => {
+
+                reject(
+                    updateRequest.error
+                );
+
+            };
+
+        };
+
+        request.onerror = () => {
+
+            reject(
+                request.error
+            );
+
+        };
+
+    });
+
+}
+
+function getComplaintsByWorkerId(workerId) {
+
+    return new Promise((resolve, reject) => {
+
+        const transaction =
+            db.transaction(
+                ["complaints"],
+                "readonly"
+            );
+
+        const store =
+            transaction.objectStore("complaints");
+
+        const index =
+            store.index("workerId");
+
+        const request =
+            index.getAll(Number(workerId));
+
+        request.onsuccess = () => {
+
+            resolve(request.result);
+
+        };
+
+        request.onerror = () => {
+
+            reject(request.error);
+
+        };
+
+    });
+
+}
+
+// Start opening the database as soon as this file is loaded. Other pages
+// can wait for this same promise before reading or saving data.
 window.dbReady = openDatabase();
+
+window.dbReady.then(
+    () => console.log("FixMyCity database ready."),
+    error => console.error("Database initialization failed:", error)
+);

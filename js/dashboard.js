@@ -10,6 +10,38 @@
 
 const DATA_URL = "../data/dashboard.json";
 
+const EMPTY_DASHBOARD = {
+    statistics: {
+        totalReports: 0,
+        resolvedReports: 0,
+        progressReports: 0,
+        pendingReports: 0
+    },
+    categories: [
+        { name: "Potholes", icon: "🕳️", count: 0 },
+        { name: "Waste & Garbage", icon: "🗑️", count: 0 },
+        { name: "Broken Streetlights", icon: "💡", count: 0 },
+        { name: "Water Issues", icon: "💧", count: 0 },
+        { name: "Damaged Roads", icon: "🚧", count: 0 },
+        { name: "Drainage", icon: "🚰", count: 0 }
+    ],
+    statuses: [
+        { name: "Submitted", description: "Awaiting initial review", count: 0, className: "submitted" },
+        { name: "Under Review", description: "Being verified", count: 0, className: "review" },
+        { name: "In Progress", description: "Work is underway", count: 0, className: "progress-status" },
+        { name: "Resolved", description: "Issue successfully fixed", count: 0, className: "resolved" }
+    ]
+};
+
+const CATEGORY_ICONS = {
+    "Potholes": "🕳️",
+    "Waste & Garbage": "🗑️",
+    "Broken Streetlights": "💡",
+    "Water Issues": "💧",
+    "Damaged Roads": "🚧",
+    "Drainage": "🚰"
+};
+
 
 // =========================================
 // DOM REFERENCES
@@ -77,7 +109,7 @@ async function fetchDashboardData() {
             error
         );
 
-        showDataError();
+        return EMPTY_DASHBOARD;
 
     }
 
@@ -119,6 +151,7 @@ function renderCategories(categories) {
 
     const maximum =
         Math.max(
+            1,
             ...categories.map(
                 category => category.count
             )
@@ -296,14 +329,18 @@ async function initializeDashboard() {
     );
 
 
-    const data =
+    let data =
         await fetchDashboardData();
 
+    try {
+        await window.dbReady;
+        const complaints = await getAllComplaints();
 
-    if (!data) {
-
-        return;
-
+        if (complaints.length > 0) {
+            data = summarizeComplaints(complaints);
+        }
+    } catch (error) {
+        console.error("Unable to load saved reports:", error);
     }
 
 
@@ -331,6 +368,50 @@ async function initializeDashboard() {
     updateLastUpdated();
 
 }
+
+function summarizeComplaints(complaints) {
+    const categories = {};
+    const statuses = {
+        "Submitted": 0,
+        "Under Review": 0,
+        "In Progress": 0,
+        "Resolved": 0
+    };
+
+    complaints.forEach(complaint => {
+        categories[complaint.category] =
+            (categories[complaint.category] || 0) + 1;
+
+        if (statuses[complaint.status] !== undefined) {
+            statuses[complaint.status] += 1;
+        }
+    });
+
+    return {
+        statistics: {
+            totalReports: complaints.length,
+            resolvedReports: statuses["Resolved"],
+            progressReports:
+                statuses["Under Review"] + statuses["In Progress"],
+            pendingReports: statuses["Submitted"]
+        },
+        categories: Object.entries(categories).map(([name, count]) => ({
+            name,
+            count,
+            icon: CATEGORY_ICONS[name] || "📌"
+        })),
+        statuses: [
+            { name: "Submitted", description: "Awaiting initial review", count: statuses["Submitted"], className: "submitted" },
+            { name: "Under Review", description: "Being verified", count: statuses["Under Review"], className: "review" },
+            { name: "In Progress", description: "Work is underway", count: statuses["In Progress"], className: "progress-status" },
+            { name: "Resolved", description: "Issue successfully fixed", count: statuses["Resolved"], className: "resolved" }
+        ]
+    };
+}
+
+document.querySelector(".view-all")?.addEventListener("click", () => {
+    window.location.href = "track.html";
+});
 
 
 // =========================================

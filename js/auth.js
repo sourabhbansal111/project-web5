@@ -236,6 +236,8 @@ signupForm.addEventListener(
 
         try {
 
+            await window.dbReady;
+
             // Check existing account
 
             const existingUser =
@@ -358,6 +360,8 @@ loginForm.addEventListener(
 
 
         try {
+
+            await window.dbReady;
 
             // ADMIN LOGIN
 
@@ -539,7 +543,7 @@ logoutBtn.addEventListener(
         );
 
 
-        updateAuthUI();
+        window.location.href = "dashboard.html";
 
     }
 );
