@@ -569,3 +569,22 @@ body {
     }
 
 }
+
+/* Clear, scalable category and action symbols. */
+.category-icon {
+    display: grid;
+    width: 36px;
+    height: 36px;
+    place-items: center;
+    border-radius: 11px;
+    background: #edf3ff;
+    color: #2c63d6;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: .3px;
+}
+
+.location-btn { display: inline-flex; align-items: center; gap: 8px; }
+.button-icon { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.upload-icon { display: grid; width: 44px; height: 44px; place-items: center; border-radius: 13px; background: #edf3ff; color: #2c63d6; }
+.upload-icon svg { width: 25px; height: 25px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }

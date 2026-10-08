@@ -8,6 +8,9 @@
     <title>Admin | FixMyCity</title>
 
     <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="../css/theme.css">
+    <script src="../js/theme.js"></script>
+    <link rel="icon" href="../assets/fixmycity-mark.svg" type="image/svg+xml">
 </head>
 
 <body>
@@ -15,7 +18,7 @@
     <header class="admin-navbar">
 
         <div class="admin-logo">
-            <div class="logo-icon">F</div>
+            <img class="logo-icon brand-mark" src="../assets/fixmycity-mark.svg" alt="" aria-hidden="true">
 
             <div>
                 <h2>FixMyCity</h2>
@@ -29,7 +32,11 @@
                 Dashboard
             </a>
 
-            <button id="adminLogout">
+            <a href="about.html">
+                About Us
+            </a>
+
+            <button id="adminLogout" class="logout-btn" type="button">
                 Logout
             </button>
 

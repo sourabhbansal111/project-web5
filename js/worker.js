@@ -9,12 +9,10 @@ const role =
 const userId =
     localStorage.getItem("fixmycityUserId");
 
+let assignedComplaints = [];
+
 document.getElementById("workerLogout")?.addEventListener("click", () => {
-    localStorage.removeItem("fixmycityLoggedIn");
-    localStorage.removeItem("fixmycityUserId");
-    localStorage.removeItem("fixmycityCurrentUser");
-    localStorage.removeItem("fixmycityCurrentEmail");
-    localStorage.removeItem("fixmycityRole");
+    clearWorkerSession();
     window.location.href = "dashboard.html";
 });
 
@@ -77,7 +75,11 @@ document.addEventListener(
 
             await window.dbReady;
 
-            await loadWorker();
+            const workerExists = await loadWorker();
+
+            if (!workerExists) {
+                return;
+            }
 
             await loadAssignedComplaints();
 
@@ -87,6 +89,12 @@ document.addEventListener(
                 "Unable to load worker panel:",
                 error
             );
+
+            const container = document.getElementById("complaintsContainer");
+            if (container) {
+                container.textContent =
+                    "Unable to load the worker panel. Please refresh the page.";
+            }
 
         }
 
@@ -109,12 +117,12 @@ async function loadWorker() {
             "Worker account could not be found."
         );
 
-        localStorage.clear();
+        clearWorkerSession();
 
         window.location.href =
             "dashboard.html";
 
-        return;
+        return false;
 
     }
 
@@ -124,22 +132,12 @@ async function loadWorker() {
             "Your account is no longer a worker."
         );
 
-        localStorage.removeItem(
-            "fixmycityLoggedIn"
-        );
-
-        localStorage.removeItem(
-            "fixmycityRole"
-        );
-
-        localStorage.removeItem(
-            "fixmycityUserId"
-        );
+        clearWorkerSession();
 
         window.location.href =
             "dashboard.html";
 
-        return;
+        return false;
 
     }
 
@@ -148,6 +146,16 @@ async function loadWorker() {
     ).textContent =
         worker.name || "Worker";
 
+    return true;
+
+}
+
+function clearWorkerSession() {
+    localStorage.removeItem("fixmycityLoggedIn");
+    localStorage.removeItem("fixmycityUserId");
+    localStorage.removeItem("fixmycityCurrentUser");
+    localStorage.removeItem("fixmycityCurrentEmail");
+    localStorage.removeItem("fixmycityRole");
 }
 
 
@@ -182,6 +190,8 @@ async function loadAssignedComplaints() {
                 new Date(a.createdAt)
         );
 
+        assignedComplaints = complaints;
+
 
         updateWorkerStats(
             complaints
@@ -194,9 +204,7 @@ async function loadAssignedComplaints() {
                 `
                 <div class="empty-state">
 
-                    <div class="empty-icon">
-                        📋
-                    </div>
+                    <div class="empty-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V2h6v2M8 10h8M8 14h8"/></svg></div>
 
                     <h3>
                         No complaints assigned
@@ -358,6 +366,7 @@ if (complaint.image) {
                         class="status-badge ${getStatusClass(
                             complaint.status
                         )}"
+                        aria-live="polite"
                     >
                         ${escapeHtml(
                             complaint.status ||
@@ -551,8 +560,32 @@ function attachStatusHandlers() {
                         newStatus
                     );
 
+                    const complaint = assignedComplaints.find(
+                        item => String(item.id) === String(complaintId)
+                    );
 
-                    await loadAssignedComplaints();
+                    if (complaint) {
+                        complaint.status = newStatus;
+                    }
+
+                    const card = button.closest(".complaint-card");
+                    const statusBadge = card?.querySelector(".status-badge");
+
+                    if (statusBadge) {
+                        statusBadge.textContent = newStatus;
+                        statusBadge.className = `status-badge ${getStatusClass(newStatus)}`;
+                    }
+
+                    updateWorkerStats(assignedComplaints);
+
+                    button.disabled = false;
+                    button.textContent = "Updated";
+
+                    window.setTimeout(() => {
+                        if (button.isConnected) {
+                            button.textContent = "Update";
+                        }
+                    }, 1200);
 
 
                 } catch (error) {

@@ -20,6 +20,9 @@
         href="../css/dashboard.css"
     >
     <link rel="stylesheet" href="../css/auth.css">
+    <link rel="stylesheet" href="../css/theme.css">
+    <script src="../js/theme.js"></script>
+    <link rel="icon" href="../assets/fixmycity-mark.svg" type="image/svg+xml">
 
 </head>
 
@@ -37,9 +40,7 @@
             </button>
 
 
-            <div class="auth-logo">
-                <span>Fix</span>MyCity
-            </div>
+            <div class="auth-logo"><img src="../assets/fixmycity-mark.svg" alt="" aria-hidden="true">FixMyCity</div>
 
 
             <!-- LOGIN -->
@@ -143,16 +144,16 @@
     <header class="navbar">
 
     <!-- LOGO -->
-    <div class="logo">
+    <a class="logo logo-link" href="dashboard.html" aria-label="FixMyCity home">
 
-        <div class="logo-icon">F</div>
+        <img class="logo-icon brand-mark" src="../assets/fixmycity-mark.svg" alt="" aria-hidden="true">
 
         <div class="logo-text">
             <h2>FixMyCity</h2>
             <span>Report. Track. Resolve.</span>
         </div>
 
-    </div>
+    </a>
 
 
     <!-- MAIN NAVIGATION -->
@@ -170,8 +171,8 @@
             Track Complaint
         </a>
 
-        <a href="#about" id="aboutNav">
-            About
+        <a href="about.html" id="aboutNav">
+            About Us
         </a>
 
     </nav>
@@ -275,9 +276,7 @@
 
     <footer id="about">
 
-        <strong>
-            FixMyCity
-        </strong>
+        <strong class="site-footer-brand"><img src="../assets/fixmycity-mark.svg" alt="" aria-hidden="true">FixMyCity</strong>
 
         <p>
             Building better cities through citizen participation.

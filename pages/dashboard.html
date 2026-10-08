@@ -17,6 +17,9 @@
         href="../css/dashboard.css"
     >
     <link rel="stylesheet" href="../css/auth.css">
+    <link rel="stylesheet" href="../css/theme.css">
+    <script src="../js/theme.js"></script>
+    <link rel="icon" href="../assets/fixmycity-mark.svg" type="image/svg+xml">
 
 </head>
 
@@ -34,9 +37,7 @@
             </button>
 
 
-            <div class="auth-logo">
-                <span>Fix</span>MyCity
-            </div>
+            <div class="auth-logo"><img src="../assets/fixmycity-mark.svg" alt="" aria-hidden="true">FixMyCity</div>
 
 
             <!-- LOGIN -->
@@ -140,16 +141,16 @@
     <header class="navbar">
 
     <!-- LOGO -->
-    <div class="logo">
+    <a class="logo logo-link" href="dashboard.html" aria-label="FixMyCity home">
 
-        <div class="logo-icon">F</div>
+        <img class="logo-icon brand-mark" src="../assets/fixmycity-mark.svg" alt="" aria-hidden="true">
 
         <div class="logo-text">
             <h2>FixMyCity</h2>
             <span>Report. Track. Resolve.</span>
         </div>
 
-    </div>
+    </a>
 
 
     <!-- MAIN NAVIGATION -->
@@ -167,8 +168,8 @@
             Track Complaint
         </a>
 
-        <a href="#about" id="aboutNav">
-            About
+        <a href="about.html" id="aboutNav">
+            About Us
         </a>
 
     </nav>
@@ -237,7 +238,7 @@
 
     <!-- ================= HERO ================= -->
 
-    <main>
+    <main class="dashboard-main">
 
         <section class="hero">
 
@@ -286,9 +287,7 @@
                         Total Reports
                     </span>
 
-                    <span class="stat-icon">
-                        📋
-                    </span>
+                    <span class="stat-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V2h6v2M8 9h8M8 13h8M8 17h5"/></svg></span>
 
                 </div>
 
@@ -314,9 +313,7 @@
                         Resolved
                     </span>
 
-                    <span class="stat-icon">
-                        ✅
-                    </span>
+                    <span class="stat-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12 2.5 2.5L16 9"/></svg></span>
 
                 </div>
 
@@ -342,9 +339,7 @@
                         In Progress
                     </span>
 
-                    <span class="stat-icon">
-                        🔧
-                    </span>
+                    <span class="stat-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14.5 6.5a5 5 0 0 0-6.4 6.4L3 18l3 3 5.1-5.1a5 5 0 0 0 6.4-6.4l-3 3-3-3 3-3Z"/></svg></span>
 
                 </div>
 
@@ -370,9 +365,7 @@
                         Pending
                     </span>
 
-                    <span class="stat-icon">
-                        ⏳
-                    </span>
+                    <span class="stat-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
 
                 </div>
 
@@ -449,6 +442,20 @@
 
         </section>
 
+        <section class="recent-section" aria-labelledby="recentReportsHeading">
+            <div class="recent-heading">
+                <div>
+                    <span class="section-label">LATEST UPDATES</span>
+                    <h2 id="recentReportsHeading">Recent reports</h2>
+                    <p>Your most recent civic reports.</p>
+                </div>
+                <a href="track.html" class="recent-link">Track my reports <span aria-hidden="true">→</span></a>
+            </div>
+            <div id="recentReportsContainer" class="recent-grid">
+                <p class="recent-empty">Loading recent reports…</p>
+            </div>
+        </section>
+
     </main>
 
 
@@ -456,9 +463,7 @@
 
     <footer id="about">
 
-        <strong>
-            FixMyCity
-        </strong>
+        <strong class="site-footer-brand"><img src="../assets/fixmycity-mark.svg" alt="" aria-hidden="true">FixMyCity</strong>
 
         <p>
             Building better cities through citizen participation.

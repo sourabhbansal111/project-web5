@@ -812,3 +812,63 @@ body {
     }
 
 }
+
+.worker-navbar {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    min-height: 76px;
+    padding: 10px clamp(18px, 5vw, 76px);
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow: 0 8px 24px rgba(27, 45, 82, 0.07);
+    backdrop-filter: blur(14px);
+}
+
+.worker-logo .logo-icon {
+    border-radius: 13px;
+    background: linear-gradient(145deg, #3478f6, #2452ce);
+    box-shadow: 0 7px 16px rgba(37, 99, 235, 0.22);
+}
+
+.worker-nav a {
+    padding: 10px 12px;
+    border-radius: 10px;
+    transition: color 0.2s ease, background 0.2s ease;
+}
+
+.worker-nav a:hover {
+    color: #2452ce;
+    background: #f0f5ff;
+}
+
+.worker-nav button {
+    padding: 9px 14px;
+    border-radius: 10px;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.worker-nav button:hover {
+    transform: translateY(-1px);
+}
+
+@media (max-width: 600px) {
+    .worker-navbar {
+        min-height: 68px;
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 13px 5%;
+    }
+
+    .worker-nav {
+        width: 100%;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        gap: 5px;
+    }
+
+    .worker-nav a {
+        display: inline-flex;
+        padding: 8px 10px;
+        font-size: 12px;
+    }
+}

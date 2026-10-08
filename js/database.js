@@ -424,6 +424,13 @@ function getUserById(id) {
 
     return new Promise((resolve, reject) => {
 
+        const userId = Number(id);
+
+        if (!Number.isSafeInteger(userId) || userId < 1) {
+            resolve(undefined);
+            return;
+        }
+
         const transaction =
             db.transaction(
                 "users",
@@ -435,7 +442,7 @@ function getUserById(id) {
 
 
         const request =
-            store.get(id);
+            store.get(userId);
 
 
         request.onsuccess = () => {

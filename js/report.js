@@ -393,7 +393,7 @@ async function getAddressFromCoordinates(
             locationData.longitude;
 
         locationStatus.textContent =
-            "✓ Current location detected";
+            "Current location detected";
 
 
     } catch (error) {
@@ -734,9 +734,7 @@ reportForm.addEventListener(
                 complaintId
             );
 
-            alert(
-                "Complaint submitted successfully!"
-            );
+            showMessage("Complaint submitted successfully.", "success");
 
             reportForm.reset();
 
@@ -762,9 +760,7 @@ reportForm.addEventListener(
                 error
             );
 
-            alert(
-                "Unable to submit complaint. Please try again."
-            );
+            showMessage("Unable to submit complaint. Please try again.", "error");
 
         }
 

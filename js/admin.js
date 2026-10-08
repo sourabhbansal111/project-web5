@@ -113,6 +113,7 @@ function renderUsers(users) {
 
         item.className =
             "user-item";
+        item.dataset.userId = String(user.id);
 
 
         item.innerHTML = `
@@ -187,6 +188,7 @@ function renderWorkers(users) {
 
         item.className =
             "worker-item";
+        item.dataset.userId = String(worker.id);
 
 
         item.innerHTML = `
@@ -239,6 +241,52 @@ function renderWorkers(users) {
 
 }
 
+function updateUserRoleInLists(user) {
+    const userItem = Array.from(
+        userList.querySelectorAll(".user-item")
+    ).find(item => item.dataset.userId === String(user.id));
+
+    const roleBadge = userItem?.querySelector(".role-badge");
+    if (roleBadge) roleBadge.textContent = user.role;
+
+    let workerItem = Array.from(
+        workerList.querySelectorAll(".worker-item")
+    ).find(item => item.dataset.userId === String(user.id));
+
+    if (user.role === "worker" && !workerItem) {
+        workerList.querySelector(".empty-message")?.remove();
+
+        workerItem = document.createElement("div");
+        workerItem.className = "worker-item";
+        workerItem.dataset.userId = String(user.id);
+        workerItem.innerHTML = `
+            <div class="user-info">
+                <h3>${escapeHtml(user.name)}</h3>
+                <p>${escapeHtml(user.email)}</p>
+                <span class="role-badge">Worker</span>
+            </div>
+            <button class="remove-worker" data-id="${user.id}" type="button">
+                Remove Worker
+            </button>
+        `;
+
+        workerItem.querySelector(".remove-worker")
+            .addEventListener("click", removeWorkerHandler);
+        workerList.appendChild(workerItem);
+    }
+
+    if (user.role !== "worker") {
+        workerItem?.remove();
+    }
+
+    const workerTotal = workerList.querySelectorAll(".worker-item").length;
+    workerCount.textContent = `${workerTotal} Worker${workerTotal === 1 ? "" : "s"}`;
+
+    if (workerTotal === 0) {
+        workerList.innerHTML = '<div class="empty-message">No workers added yet.</div>';
+    }
+}
+
 
 // =========================================
 // ADD WORKER
@@ -261,6 +309,7 @@ addWorkerForm.addEventListener(
             return;
         }
 
+        const submitButton = addWorkerForm.querySelector("button[type='submit']");
 
         try {
 
@@ -296,25 +345,31 @@ addWorkerForm.addEventListener(
 
             // Promote user
 
+            submitButton.disabled = true;
+            submitButton.textContent = "Adding...";
             user.role = "worker";
 
             await updateUser(user);
 
 
             workerEmail.value = "";
+            updateUserRoleInLists(user);
 
-
-            alert(
-                `${user.name} has been added as a worker.`
-            );
-
-
-            await loadUsers();
+            submitButton.textContent = "Added";
+            window.setTimeout(() => {
+                if (submitButton.isConnected) {
+                    submitButton.disabled = false;
+                    submitButton.textContent = "Add Worker";
+                }
+            }, 1200);
 
 
         } catch (error) {
 
             console.error(error);
+
+            submitButton.disabled = false;
+            submitButton.textContent = "Add Worker";
 
             alert(
                 "Unable to add worker."
@@ -332,9 +387,11 @@ addWorkerForm.addEventListener(
 
 async function removeWorkerHandler(event) {
 
+    const removeButton = event.currentTarget || event.target;
+
     const workerId =
         Number(
-            event.target.dataset.id
+            removeButton.dataset.id
         );
 
 
@@ -367,22 +424,23 @@ async function removeWorkerHandler(event) {
         }
 
 
+        removeButton.disabled = true;
+        removeButton.textContent = "Removing...";
+
         worker.role = "user";
 
         await updateUser(worker);
-
-
-        alert(
-            `${worker.name} is now a normal user.`
-        );
-
-
-        await loadUsers();
+        updateUserRoleInLists(worker);
 
 
     } catch (error) {
 
         console.error(error);
+
+        if (removeButton.isConnected) {
+            removeButton.disabled = false;
+            removeButton.textContent = "Remove Worker";
+        }
 
         alert(
             "Unable to remove worker."
@@ -527,6 +585,7 @@ async function loadComplaints() {
 
             card.className =
                 "complaint-card";
+            card.dataset.complaintId = String(complaint.id);
 
             card.innerHTML = `
 
@@ -558,7 +617,7 @@ async function loadComplaints() {
 
                     </div>
 
-                    <span class="complaint-status">
+                    <span class="complaint-status" aria-live="polite">
 
                         ${escapeHtml(
                             complaint.status
@@ -611,11 +670,7 @@ async function loadComplaints() {
 
                     <strong>Assigned Worker:</strong>
 
-                    ${
-                        worker
-                            ? escapeHtml(worker.name)
-                            : "Not assigned"
-                    }
+                    <span class="assigned-worker-name">${worker ? escapeHtml(worker.name) : "Not assigned"}</span>
 
                 </div>
 
@@ -725,16 +780,26 @@ function attachAssignmentHandlers() {
 
                 try {
 
-                    await assignWorker(
-                        complaintId,
-                        workerId
-                    );
+                    button.disabled = true;
+                    button.textContent = "Assigning...";
 
-                    alert(
-                        "Worker assigned successfully."
-                    );
+                    const updatedComplaint = await assignWorker(complaintId, workerId);
 
-                    await loadComplaints();
+                    const card = button.closest(".complaint-card");
+                    const workerName = select.options[select.selectedIndex].textContent.trim();
+                    const assignedWorker = card?.querySelector(".assigned-worker-name");
+                    const status = card?.querySelector(".complaint-status");
+
+                    if (assignedWorker) assignedWorker.textContent = workerName;
+                    if (status) status.textContent = updatedComplaint.status || "Under Review";
+
+                    button.textContent = "Assigned";
+                    window.setTimeout(() => {
+                        if (button.isConnected) {
+                            button.disabled = false;
+                            button.textContent = "Assign";
+                        }
+                    }, 1200);
 
                 } catch (error) {
 
@@ -745,6 +810,9 @@ function attachAssignmentHandlers() {
                     alert(
                         "Unable to assign worker."
                     );
+
+                    button.disabled = false;
+                    button.textContent = "Assign";
 
                 }
 

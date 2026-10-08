@@ -20,6 +20,10 @@ body {
 }
 
 .loader-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 13px;
     font-size: 42px;
     font-weight: 700;
     color: #1e293b;
@@ -70,3 +74,5 @@ body {
         transform: translateY(0);
     }
 }
+
+.loader-logo img { width: 52px; height: 52px; border-radius: 16px; }

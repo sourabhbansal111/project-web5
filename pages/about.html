@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Learn about FixMyCity and how it makes civic issue reporting easier to follow.">
+    <title>About Us | FixMyCity</title>
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../css/auth.css">
+    <link rel="stylesheet" href="../css/about.css">
+    <link rel="stylesheet" href="../css/theme.css">
+    <script src="../js/theme.js"></script>
+    <link rel="icon" href="../assets/fixmycity-mark.svg" type="image/svg+xml">
+</head>
+<body>
+    <div id="authModal" class="auth-modal">
+        <div class="auth-box">
+            <button id="closeAuth" class="close-auth" type="button" aria-label="Close">×</button>
+            <div class="auth-logo"><img src="../assets/fixmycity-mark.svg" alt="" aria-hidden="true">FixMyCity</div>
+
+            <div id="loginSection">
+                <h2>Welcome Back</h2>
+                <p>Login to your FixMyCity account</p>
+                <form id="loginForm">
+                    <input type="email" id="loginEmail" placeholder="Email" required>
+                    <input type="password" id="loginPassword" placeholder="Password" required>
+                    <button type="submit">Login</button>
+                </form>
+                <div class="auth-switch">Don't have an account? <button id="showSignup" type="button">Sign Up</button></div>
+            </div>
+
+            <div id="signupSection">
+                <h2>Create Account</h2>
+                <p>Join FixMyCity today</p>
+                <form id="signupForm">
+                    <input type="text" id="signupName" placeholder="Full Name" required>
+                    <input type="email" id="signupEmail" placeholder="Email" required>
+                    <input type="password" id="signupPassword" placeholder="Password" required>
+                    <button type="submit">Create Account</button>
+                </form>
+                <div class="auth-switch">Already have an account? <button id="showLogin" type="button">Login</button></div>
+            </div>
+        </div>
+    </div>
+
+    <header class="navbar">
+        <a class="logo logo-link" href="dashboard.html" aria-label="FixMyCity home">
+            <img class="logo-icon brand-mark" src="../assets/fixmycity-mark.svg" alt="" aria-hidden="true">
+            <div class="logo-text">
+                <h2>FixMyCity</h2>
+                <span>Report. Track. Resolve.</span>
+            </div>
+        </a>
+
+        <nav class="main-nav" aria-label="Main navigation">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="report.html">Report Issue</a>
+            <a href="track.html">Track Complaint</a>
+            <a href="about.html" class="active" aria-current="page">About Us</a>
+        </nav>
+
+        <div class="auth-actions">
+            <button id="loginBtn" class="login-btn" type="button">Login</button>
+            <button id="signupBtn" class="signup-btn" type="button">Sign Up</button>
+            <span id="userName" class="user-name" style="display: none;"></span>
+            <a href="admin.html" id="adminPanelLink" class="role-link" style="display: none;">Admin Panel</a>
+            <a href="worker.html" id="workerPanelLink" class="role-link" style="display: none;">Worker Panel</a>
+            <button id="logoutBtn" class="logout-btn" type="button" style="display: none;">Logout</button>
+        </div>
+    </header>
+
+    <main>
+        <section class="about-hero">
+            <div class="about-hero-copy">
+                <span class="about-eyebrow"><span></span> A clearer way to care for our city</span>
+                <h1>Better neighborhoods start with <em>being heard.</em></h1>
+                <p>FixMyCity is a simple civic reporting project that helps people describe local issues, follow their progress, and see how a clear process can bring a community together.</p>
+                <div class="about-actions">
+                    <a class="about-primary" href="dashboard.html">Explore the dashboard <span aria-hidden="true">→</span></a>
+                    <a class="about-secondary" href="#how-it-works">See how it works</a>
+                </div>
+                <div class="about-note"><span aria-hidden="true"></span> Small reports can lead to meaningful change.</div>
+            </div>
+
+            <div class="about-art">
+                <img src="../assets/civic-neighborhood.png" alt="A well-kept neighborhood street with civic workers inspecting local infrastructure">
+                <div class="art-card"><span class="art-card-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg></span><span><strong>Issue resolved</strong><small>One step at a time</small></span></div>
+                <div class="art-label">Your neighborhood, moving forward</div>
+            </div>
+        </section>
+
+        <section class="about-intro">
+            <div>
+                <span class="section-kicker">WHY FIXMYCITY</span>
+                <h2>Make the next step<br>feel simple.</h2>
+            </div>
+            <p>When a streetlight goes out or a road needs attention, it should be easy to explain what happened and understand what comes next. FixMyCity brings those steps into one friendly place.</p>
+        </section>
+
+        <section class="about-values" aria-label="What FixMyCity offers">
+            <article class="value-card">
+                <div class="value-icon icon-blue">01</div>
+                <h3>Easy to report</h3>
+                <p>Share the issue, add a location, and include a photo so the problem is easy to understand.</p>
+            </article>
+            <article class="value-card">
+                <div class="value-icon icon-mint">02</div>
+                <h3>Clear to follow</h3>
+                <p>Check each report’s progress through simple updates from submission to resolution.</p>
+            </article>
+            <article class="value-card">
+                <div class="value-icon icon-peach">03</div>
+                <h3>Built around people</h3>
+                <p>A thoughtful, accessible experience helps residents and service teams stay organized.</p>
+            </article>
+        </section>
+
+        <section class="about-process" id="how-it-works">
+            <div class="process-heading">
+                <span class="section-kicker">HOW IT WORKS</span>
+                <h2>One report. A clear path forward.</h2>
+                <p>Every issue follows a simple journey, so it’s easier to know what has happened and what comes next.</p>
+            </div>
+            <div class="process-steps">
+                <article class="process-step">
+                    <span class="step-number">1</span>
+                    <div><h3>Tell us what you see</h3><p>Choose a category and share the location and details.</p></div>
+                </article>
+                <article class="process-step">
+                    <span class="step-number">2</span>
+                    <div><h3>Work gets organized</h3><p>Reports can be reviewed and assigned to a worker.</p></div>
+                </article>
+                <article class="process-step">
+                    <span class="step-number">3</span>
+                    <div><h3>Follow the progress</h3><p>See updates as the issue moves toward resolution.</p></div>
+                </article>
+            </div>
+        </section>
+
+        <section class="about-cta">
+            <div class="cta-sparkle" aria-hidden="true"></div>
+            <div>
+                <span>LET’S MAKE THINGS BETTER</span>
+                <h2>See something that needs attention?</h2>
+                <p>Start with a report. We’ll help keep the next steps easy to follow.</p>
+            </div>
+            <a href="dashboard.html">Open FixMyCity <span aria-hidden="true">→</span></a>
+        </section>
+    </main>
+
+    <footer class="about-footer">
+        <a class="footer-brand" href="dashboard.html"><img src="../assets/fixmycity-mark.svg" alt="" aria-hidden="true"> FixMyCity</a>
+        <p>Thoughtful tools for stronger neighborhoods.</p>
+        <span class="footer-copy">© FixMyCity</span>
+    </footer>
+
+    <script src="../js/database.js"></script>
+    <script src="../js/auth.js"></script>
+</body>
+</html>
