@@ -1,0 +1,23 @@
+# IDE and editor settings
+.vscode/
+.vs/
+.idea/
+*.suo
+*.user
+
+# Operating system files
+.DS_Store
+._*
+Thumbs.db
+Desktop.ini
+
+# Logs and temporary files
+*.log
+*.tmp
+*.swp
+*.swo
+
+# Dependencies and generated output (if added later)
+node_modules/
+dist/
+build/
