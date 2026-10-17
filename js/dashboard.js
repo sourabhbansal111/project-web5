@@ -18,12 +18,13 @@ const EMPTY_DASHBOARD = {
         pendingReports: 0
     },
     categories: [
-        { name: "Potholes", icon: "PT", count: 0 },
-        { name: "Waste & Garbage", icon: "WG", count: 0 },
-        { name: "Broken Streetlights", icon: "LT", count: 0 },
-        { name: "Water Issues", icon: "WT", count: 0 },
-        { name: "Damaged Roads", icon: "RD", count: 0 },
-        { name: "Drainage", icon: "DR", count: 0 }
+        { name: "Potholes", count: 0 },
+        { name: "Waste & Garbage", count: 0 },
+        { name: "Broken Streetlights", count: 0 },
+        { name: "Water Issues", count: 0 },
+        { name: "Damaged Roads", count: 0 },
+        { name: "Drainage", count: 0 },
+        { name: "Other", count: 0 }
     ],
     statuses: [
         { name: "Submitted", description: "Awaiting initial review", count: 0, className: "submitted" },
@@ -33,14 +34,7 @@ const EMPTY_DASHBOARD = {
     ]
 };
 
-const CATEGORY_ICONS = {
-    "Potholes": "PT",
-    "Waste & Garbage": "WG",
-    "Broken Streetlights": "LT",
-    "Water Issues": "WT",
-    "Damaged Roads": "RD",
-    "Drainage": "DR"
-};
+const CATEGORY_NAMES = window.issueCategoryNames;
 
 
 // =========================================
@@ -173,37 +167,34 @@ function renderCategories(categories) {
         );
 
 
-        item.innerHTML = `
+        const top = document.createElement("div");
+        top.className = "issue-top";
 
-            <div class="issue-top">
+        const name = document.createElement("span");
+        name.className = "issue-name";
 
-                <span class="issue-name">
+        const icon = document.createElement("span");
+        icon.className = "category-mark";
+        icon.innerHTML = window.issueCategoryIconMarkup(category.name);
 
-                    <span class="category-mark" aria-hidden="true">${category.icon}</span>
-                    ${category.name}
+        const label = document.createElement("span");
+        label.textContent = category.name;
+        name.append(icon, label);
 
-                </span>
+        const count = document.createElement("span");
+        count.className = "issue-count";
+        count.textContent = String(category.count);
+        top.append(name, count);
 
+        const progress = document.createElement("div");
+        progress.className = "progress";
 
-                <span class="issue-count">
+        const bar = document.createElement("div");
+        bar.className = "progress-bar";
+        bar.style.width = `${percentage}%`;
+        progress.appendChild(bar);
 
-                    ${category.count}
-
-                </span>
-
-            </div>
-
-
-            <div class="progress">
-
-                <div
-                    class="progress-bar"
-                    style="width: ${percentage}%"
-                ></div>
-
-            </div>
-
-        `;
+        item.append(top, progress);
 
 
         categoryContainer.appendChild(item);
@@ -480,11 +471,10 @@ function summarizeComplaints(complaints) {
             pendingReports: statuses["Submitted"]
         },
         categories: Array.from(
-            new Set([...Object.keys(CATEGORY_ICONS), ...Object.keys(categories)]),
+            new Set([...CATEGORY_NAMES, ...Object.keys(categories)]),
             name => ({
                 name,
-                count: categories[name] || 0,
-                icon: CATEGORY_ICONS[name] || "OT"
+                count: categories[name] || 0
             })
         ),
         statuses: [

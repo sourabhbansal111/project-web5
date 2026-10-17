@@ -1,11 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="FixMyCity mark">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="FixMyCity civic location mark">
   <defs>
-    <linearGradient id="blue" x1="8" y1="5" x2="56" y2="60" gradientUnits="userSpaceOnUse">
+    <linearGradient id="city-blue" x1="8" y1="4" x2="56" y2="61" gradientUnits="userSpaceOnUse">
       <stop stop-color="#4f8cff"/>
       <stop offset="1" stop-color="#2051c9"/>
     </linearGradient>
   </defs>
-  <rect x="2" y="2" width="60" height="60" rx="18" fill="url(#blue)"/>
-  <path d="M14 47h36M18 47V32h9v15m2 0V23h9v24m2 0V34h8v13" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3.5"/>
-  <path d="m29 31 4 4 8-9" fill="none" stroke="#b8f1dc" stroke-linecap="round" stroke-linejoin="round" stroke-width="3.5"/>
+  <rect x="2" y="2" width="60" height="60" rx="18" fill="url(#city-blue)"/>
+  <path d="M32 7.5c-9.7 0-17.5 7.8-17.5 17.5C14.5 37 32 56.5 32 56.5S49.5 37 49.5 25C49.5 15.3 41.7 7.5 32 7.5Z" fill="#fff"/>
+  <circle cx="32" cy="24.5" r="12.2" fill="#2d63d8"/>
+  <path d="m22.5 25 9.5-6 9.5 6M24 26h16M26 26v7m6-7v7m6-7v7M23 34h18" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="m29 39 2.4 2.4 4.8-4.8" fill="none" stroke="#a7f3d0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>

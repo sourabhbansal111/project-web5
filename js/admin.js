@@ -38,6 +38,9 @@ const adminLogout =
         "adminLogout"
     );
 
+let adminComplaints = [];
+let adminStatusFilter = "all";
+
 
 // =========================================
 // CHECK ADMIN
@@ -68,6 +71,135 @@ function checkAdminAccess() {
     return true;
 }
 
+function setupAdminNavigation() {
+    const viewDetails = {
+        overview: {
+            title: "Overview",
+            description: "City service reports and operations at a glance."
+        },
+        complaints: {
+            title: "Complaints",
+            description: "Review, filter, and assign reported civic issues."
+        },
+        workers: {
+            title: "Workers",
+            description: "Add workers and manage worker access."
+        },
+        users: {
+            title: "Users",
+            description: "Browse accounts registered on FixMyCity."
+        }
+    };
+
+    document.querySelectorAll("[data-admin-view-target]").forEach(button => {
+        button.addEventListener("click", () => {
+            const viewName = button.dataset.adminViewTarget;
+            const view = document.querySelector(`[data-admin-view="${viewName}"]`);
+            if (!view) return;
+
+            document.querySelectorAll(".admin-view").forEach(section => {
+                const isActive = section === view;
+                section.hidden = !isActive;
+                section.classList.toggle("is-active", isActive);
+            });
+
+            document.querySelectorAll(".admin-nav-item").forEach(navItem => {
+                const isActive = navItem.dataset.adminViewTarget === viewName;
+                navItem.classList.toggle("is-active", isActive);
+                if (isActive) {
+                    navItem.setAttribute("aria-current", "page");
+                } else {
+                    navItem.removeAttribute("aria-current");
+                }
+            });
+
+            const details = viewDetails[viewName];
+            if (details) {
+                document.getElementById("adminViewTitle").textContent = details.title;
+                document.getElementById("adminViewDescription").textContent = details.description;
+            }
+        });
+    });
+}
+
+function updateAdminOverviewCounts() {
+    const pendingCount = adminComplaints.filter(complaint =>
+        getComplaintStatus(complaint).toLowerCase() !== "resolved"
+    ).length;
+    const resolvedCount = adminComplaints.length - pendingCount;
+    const workerTotal = workerList?.querySelectorAll(".worker-item").length || 0;
+    const userTotal = userList?.querySelectorAll(".user-item").length || 0;
+
+    document.getElementById("adminTotalReports").textContent = String(adminComplaints.length);
+    document.getElementById("adminPendingReports").textContent = String(pendingCount);
+    document.getElementById("adminResolvedReports").textContent = String(resolvedCount);
+    document.getElementById("adminTotalWorkers").textContent = String(workerTotal);
+    document.getElementById("adminRegisteredUserCount").textContent =
+        `${userTotal} account${userTotal === 1 ? "" : "s"}`;
+
+    renderAdminCategoryOverview();
+
+    const sidebarComplaintCount = document.getElementById("sidebarComplaintCount");
+    if (sidebarComplaintCount) sidebarComplaintCount.textContent = String(adminComplaints.length);
+}
+
+function renderAdminCategoryOverview() {
+    const container = document.getElementById("adminCategoryList");
+    if (!container) return;
+
+    const counts = new Map();
+    adminComplaints.forEach(complaint => {
+        const category = complaint.category || "Other";
+        counts.set(category, (counts.get(category) || 0) + 1);
+    });
+
+    const categories = [...new Set([
+        ...window.issueCategoryNames,
+        ...counts.keys()
+    ])].map(name => ({
+        name,
+        count: counts.get(name) || 0
+    }));
+    const maximum = Math.max(1, ...categories.map(category => category.count));
+
+    container.replaceChildren();
+    categories.forEach(category => {
+        const item = document.createElement("div");
+        item.className = "admin-category-item";
+
+        const details = document.createElement("div");
+        details.className = "admin-category-details";
+
+        const label = document.createElement("span");
+        label.className = "admin-category-name";
+
+        const icon = document.createElement("span");
+        icon.className = "admin-category-icon";
+        icon.innerHTML = window.issueCategoryIconMarkup(category.name);
+
+        const name = document.createElement("span");
+        name.textContent = category.name;
+        label.append(icon, name);
+
+        const count = document.createElement("strong");
+        count.className = "admin-category-count";
+        count.textContent = String(category.count);
+        details.append(label, count);
+
+        const track = document.createElement("div");
+        track.className = "admin-category-track";
+        track.setAttribute("role", "img");
+        track.setAttribute("aria-label", `${category.count} ${category.name} reports`);
+
+        const fill = document.createElement("span");
+        fill.style.width = `${(category.count / maximum) * 100}%`;
+        track.appendChild(fill);
+
+        item.append(details, track);
+        container.appendChild(item);
+    });
+}
+
 
 // =========================================
 // LOAD USERS
@@ -80,6 +212,7 @@ async function loadUsers() {
 
     renderUsers(users);
     renderWorkers(users);
+    updateAdminOverviewCounts();
 
 }
 
@@ -281,6 +414,7 @@ function updateUserRoleInLists(user) {
 
     const workerTotal = workerList.querySelectorAll(".worker-item").length;
     workerCount.textContent = `${workerTotal} Worker${workerTotal === 1 ? "" : "s"}`;
+    updateAdminOverviewCounts();
 
     if (workerTotal === 0) {
         workerList.innerHTML = '<div class="empty-message">No workers added yet.</div>';
@@ -499,6 +633,8 @@ document.addEventListener(
             return;
         }
 
+        setupAdminNavigation();
+
         try {
 
             await window.dbReady;
@@ -528,6 +664,19 @@ document
         loadComplaints
     );
 
+document.querySelectorAll(".complaint-status-filter").forEach(button => {
+    button.addEventListener("click", () => {
+        adminStatusFilter = button.dataset.statusFilter || "all";
+        applyAdminComplaintFilters();
+    });
+});
+
+document.getElementById("complaintCategoryFilter")
+    ?.addEventListener("change", applyAdminComplaintFilters);
+
+document.getElementById("complaintWorkerFilter")
+    ?.addEventListener("change", applyAdminComplaintFilters);
+
 // =========================================
 // LOAD COMPLAINTS
 // =========================================
@@ -552,6 +701,11 @@ async function loadComplaints() {
 
         const workers =
             await getAllWorkers();
+
+        adminComplaints = complaints;
+        populateAdminComplaintFilters(workers, complaints);
+        updateAdminStatusFilterCounts();
+        updateAdminOverviewCounts();
 
         if (complaints.length === 0) {
 
@@ -586,6 +740,11 @@ async function loadComplaints() {
             card.className =
                 "complaint-card";
             card.dataset.complaintId = String(complaint.id);
+            card.dataset.status = getComplaintStatus(complaint);
+            card.dataset.category = complaint.category || "";
+            card.dataset.workerId = complaint.workerId
+                ? String(complaint.workerId)
+                : "unassigned";
 
             card.innerHTML = `
 
@@ -594,6 +753,10 @@ async function loadComplaints() {
                         class="complaint-photo"
                         src="${escapeHtml(complaint.image)}"
                         alt="Reported issue"
+                        role="button"
+                        tabindex="0"
+                        aria-label="Expand complaint photo"
+                        aria-haspopup="dialog"
                     >
                 ` : ""}
 
@@ -620,7 +783,7 @@ async function loadComplaints() {
                     <span class="complaint-status" aria-live="polite">
 
                         ${escapeHtml(
-                            complaint.status
+                            getComplaintStatus(complaint)
                         )}
 
                     </span>
@@ -721,7 +884,15 @@ async function loadComplaints() {
 
         }
 
+        const filterEmptyMessage = document.createElement("p");
+        filterEmptyMessage.id = "complaintsFilterEmpty";
+        filterEmptyMessage.className = "empty-message complaint-filter-empty";
+        filterEmptyMessage.hidden = true;
+        filterEmptyMessage.textContent = "No complaints match these filters.";
+        container.appendChild(filterEmptyMessage);
+
         attachAssignmentHandlers();
+        applyAdminComplaintFilters();
 
     } catch (error) {
 
@@ -738,6 +909,118 @@ async function loadComplaints() {
 
     }
 
+}
+
+function getComplaintStatus(complaint) {
+    return complaint.status || "Submitted";
+}
+
+function populateAdminComplaintFilters(workers, complaints) {
+    const categoryFilter = document.getElementById("complaintCategoryFilter");
+    const workerFilter = document.getElementById("complaintWorkerFilter");
+    const selectedCategory = categoryFilter?.value || "all";
+    const selectedWorker = workerFilter?.value || "all";
+
+    if (categoryFilter) {
+        const commonCategories = [
+            "Potholes",
+            "Waste & Garbage",
+            "Broken Streetlights",
+            "Water Issues",
+            "Damaged Roads",
+            "Drainage",
+            "Other"
+        ];
+        const additionalCategories = [...new Set(
+            complaints
+                .map(complaint => complaint.category)
+                .filter(category => category && !commonCategories.includes(category))
+        )].sort((a, b) => String(a).localeCompare(String(b)));
+
+        categoryFilter.innerHTML = '<option value="all">All issue types</option>';
+        [...commonCategories, ...additionalCategories].forEach(category => {
+            const option = document.createElement("option");
+            option.value = category;
+            option.textContent = category;
+            categoryFilter.appendChild(option);
+        });
+
+        categoryFilter.value = [...categoryFilter.options]
+            .some(option => option.value === selectedCategory)
+            ? selectedCategory
+            : "all";
+    }
+
+    if (workerFilter) {
+        workerFilter.innerHTML = `
+            <option value="all">All workers</option>
+            <option value="unassigned">Unassigned</option>
+        `;
+
+        workers
+            .slice()
+            .sort((a, b) => String(a.name || "").localeCompare(String(b.name || "")))
+            .forEach(worker => {
+                const option = document.createElement("option");
+                option.value = String(worker.id);
+                option.textContent = worker.name || "Unnamed worker";
+                workerFilter.appendChild(option);
+            });
+
+        workerFilter.value = [...workerFilter.options]
+            .some(option => option.value === selectedWorker)
+            ? selectedWorker
+            : "all";
+    }
+}
+
+function updateAdminStatusFilterCounts() {
+    const counts = {
+        all: adminComplaints.length,
+        pending: adminComplaints.filter(complaint =>
+            getComplaintStatus(complaint).toLowerCase() !== "resolved"
+        ).length,
+        resolved: adminComplaints.filter(complaint =>
+            getComplaintStatus(complaint).toLowerCase() === "resolved"
+        ).length
+    };
+
+    Object.entries(counts).forEach(([status, count]) => {
+        const countElement = document.querySelector(`[data-status-count="${status}"]`);
+        if (countElement) countElement.textContent = String(count);
+    });
+}
+
+function applyAdminComplaintFilters() {
+    const container = document.getElementById("complaintsContainer");
+    if (!container) return;
+
+    const categoryFilter = document.getElementById("complaintCategoryFilter")?.value || "all";
+    const workerFilter = document.getElementById("complaintWorkerFilter")?.value || "all";
+    const cards = container.querySelectorAll(".complaint-card");
+    let visibleCount = 0;
+
+    document.querySelectorAll(".complaint-status-filter").forEach(button => {
+        const isActive = button.dataset.statusFilter === adminStatusFilter;
+        button.classList.toggle("is-active", isActive);
+        button.setAttribute("aria-pressed", String(isActive));
+    });
+
+    cards.forEach(card => {
+        const status = (card.dataset.status || "Submitted").toLowerCase();
+        const statusMatches = adminStatusFilter === "all" ||
+            (adminStatusFilter === "pending" && status !== "resolved") ||
+            (adminStatusFilter === "resolved" && status === "resolved");
+        const categoryMatches = categoryFilter === "all" || card.dataset.category === categoryFilter;
+        const workerMatches = workerFilter === "all" || card.dataset.workerId === workerFilter;
+        const isVisible = statusMatches && categoryMatches && workerMatches;
+
+        card.hidden = !isVisible;
+        if (isVisible) visibleCount += 1;
+    });
+
+    const emptyMessage = document.getElementById("complaintsFilterEmpty");
+    if (emptyMessage) emptyMessage.hidden = visibleCount > 0;
 }
 
 // =========================================
@@ -791,7 +1074,24 @@ function attachAssignmentHandlers() {
                     const status = card?.querySelector(".complaint-status");
 
                     if (assignedWorker) assignedWorker.textContent = workerName;
-                    if (status) status.textContent = updatedComplaint.status || "Under Review";
+                    const updatedStatus = updatedComplaint.status || "Under Review";
+                    if (status) status.textContent = updatedStatus;
+
+                    const complaint = adminComplaints.find(
+                        item => String(item.id) === String(complaintId)
+                    );
+                    if (complaint) {
+                        complaint.workerId = Number(workerId);
+                        complaint.status = updatedStatus;
+                    }
+                    if (card) {
+                        card.dataset.workerId = String(workerId);
+                        card.dataset.status = updatedStatus;
+                    }
+
+                    updateAdminStatusFilterCounts();
+                    updateAdminOverviewCounts();
+                    applyAdminComplaintFilters();
 
                     button.textContent = "Assigned";
                     window.setTimeout(() => {

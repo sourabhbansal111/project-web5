@@ -10,10 +10,18 @@ const userId =
     localStorage.getItem("fixmycityUserId");
 
 let assignedComplaints = [];
+let workerStatusFilter = "all";
 
 document.getElementById("workerLogout")?.addEventListener("click", () => {
     clearWorkerSession();
     window.location.href = "dashboard.html";
+});
+
+document.querySelectorAll(".complaint-status-filter").forEach(button => {
+    button.addEventListener("click", () => {
+        workerStatusFilter = button.dataset.statusFilter || "all";
+        applyWorkerStatusFilter();
+    });
 });
 
 
@@ -197,6 +205,8 @@ async function loadAssignedComplaints() {
             complaints
         );
 
+        updateWorkerStatusFilterCounts();
+
 
         if (complaints.length === 0) {
 
@@ -237,8 +247,16 @@ async function loadAssignedComplaints() {
         container.innerHTML =
             cards.join("");
 
+        const filterEmptyMessage = document.createElement("p");
+        filterEmptyMessage.id = "workerComplaintsFilterEmpty";
+        filterEmptyMessage.className = "empty-message complaint-filter-empty";
+        filterEmptyMessage.hidden = true;
+        filterEmptyMessage.textContent = "No complaints match this status.";
+        container.appendChild(filterEmptyMessage);
+
 
         attachStatusHandlers();
+        applyWorkerStatusFilter();
 
     } catch (error) {
 
@@ -326,6 +344,10 @@ if (complaint.image) {
             <img
                 src="${escapeHtml(imageUrl)}"
                 alt="Reported issue"
+                role="button"
+                tabindex="0"
+                aria-label="Expand complaint photo"
+                aria-haspopup="dialog"
             >
 
         </div>
@@ -336,6 +358,7 @@ if (complaint.image) {
         <article
             class="complaint-card"
             data-id="${complaint.id}"
+            data-status="${escapeHtml(complaint.status || "Submitted")}"
         >
 
             ${imageSection}
@@ -576,7 +599,11 @@ function attachStatusHandlers() {
                         statusBadge.className = `status-badge ${getStatusClass(newStatus)}`;
                     }
 
+                    if (card) card.dataset.status = newStatus;
+
                     updateWorkerStats(assignedComplaints);
+                    updateWorkerStatusFilterCounts();
+                    applyWorkerStatusFilter();
 
                     button.disabled = false;
                     button.textContent = "Updated";
@@ -674,6 +701,56 @@ function updateWorkerStats(
     ).textContent =
         resolved;
 
+}
+
+function updateWorkerStatusFilterCounts() {
+    const counts = {
+        all: assignedComplaints.length,
+        pending: assignedComplaints.filter(complaint =>
+            (complaint.status || "Submitted").toLowerCase() !== "resolved"
+        ).length,
+        resolved: assignedComplaints.filter(complaint =>
+            (complaint.status || "Submitted").toLowerCase() === "resolved"
+        ).length
+    };
+
+    Object.entries(counts).forEach(([status, count]) => {
+        const countElement = document.querySelector(`[data-status-count="${status}"]`);
+        if (countElement) countElement.textContent = String(count);
+    });
+
+    document.querySelectorAll(".complaint-status-filter").forEach(button => {
+        const isActive = button.dataset.statusFilter === workerStatusFilter;
+        button.classList.toggle("is-active", isActive);
+        button.setAttribute("aria-pressed", String(isActive));
+    });
+}
+
+function applyWorkerStatusFilter() {
+    const container = document.getElementById("complaintsContainer");
+    if (!container) return;
+
+    const cards = container.querySelectorAll(".complaint-card");
+    let visibleCount = 0;
+
+    document.querySelectorAll(".complaint-status-filter").forEach(button => {
+        const isActive = button.dataset.statusFilter === workerStatusFilter;
+        button.classList.toggle("is-active", isActive);
+        button.setAttribute("aria-pressed", String(isActive));
+    });
+
+    cards.forEach(card => {
+        const status = (card.dataset.status || "Submitted").toLowerCase();
+        const isVisible = workerStatusFilter === "all" ||
+            (workerStatusFilter === "pending" && status !== "resolved") ||
+            (workerStatusFilter === "resolved" && status === "resolved");
+
+        card.hidden = !isVisible;
+        if (isVisible) visibleCount += 1;
+    });
+
+    const emptyMessage = document.getElementById("workerComplaintsFilterEmpty");
+    if (emptyMessage) emptyMessage.hidden = visibleCount > 0;
 }
 
 

@@ -17,6 +17,7 @@
         href="../css/worker.css"
     >
     <link rel="stylesheet" href="../css/theme.css">
+    <link rel="stylesheet" href="../css/image-preview.css">
     <script src="../js/theme.js"></script>
     <link rel="icon" href="../assets/fixmycity-mark.svg" type="image/svg+xml">
 
@@ -185,6 +186,18 @@
         </div>
 
 
+        <div class="complaint-status-filters" role="group" aria-label="Filter complaints by status">
+            <button class="complaint-status-filter is-active" type="button" data-status-filter="all" aria-pressed="true">
+                All <span class="filter-count" data-status-count="all">0</span>
+            </button>
+            <button class="complaint-status-filter" type="button" data-status-filter="pending" aria-pressed="false">
+                Pending <span class="filter-count" data-status-count="pending">0</span>
+            </button>
+            <button class="complaint-status-filter" type="button" data-status-filter="resolved" aria-pressed="false">
+                Resolved <span class="filter-count" data-status-count="resolved">0</span>
+            </button>
+        </div>
+
         <div
             id="complaintsContainer"
             class="complaints-container"
@@ -204,6 +217,7 @@
     <script src="../js/helpers/database.js"></script>
 
     <script src="../js/worker.js"></script>
+    <script src="../js/helpers/image-preview.js"></script>
 
 </body>
 

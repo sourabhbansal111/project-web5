@@ -771,6 +771,9 @@ body {
 .issue-name {
 
     font-weight: bold;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
 }
 
 
@@ -987,15 +990,22 @@ footer p {
     display: inline-grid;
     width: 28px;
     height: 28px;
-    margin-right: 8px;
+    flex: 0 0 28px;
     place-items: center;
     border-radius: 9px;
     background: #edf3ff;
     color: #2c63d6;
-    font-size: 10px;
-    font-weight: 800;
-    letter-spacing: .2px;
     vertical-align: middle;
+}
+
+.category-mark svg {
+    width: 17px;
+    height: 17px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
 }
 
 .stat-icon svg { width: 18px; height: 18px; fill: none; stroke: #3971dd; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
@@ -1414,6 +1424,7 @@ body > footer {
     line-height: 1.55;
     overflow-wrap: anywhere;
     -webkit-box-orient: vertical;
+    line-clamp: 2;
     -webkit-line-clamp: 2;
 }
 

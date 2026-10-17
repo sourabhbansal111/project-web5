@@ -9,33 +9,31 @@
     "categories": [
         {
             "name": "Potholes",
-            "icon": "PT",
             "count": 342
         },
         {
             "name": "Waste & Garbage",
-            "icon": "WG",
             "count": 276
         },
         {
             "name": "Broken Streetlights",
-            "icon": "LT",
             "count": 198
         },
         {
             "name": "Water Issues",
-            "icon": "WT",
             "count": 167
         },
         {
             "name": "Damaged Roads",
-            "icon": "RD",
             "count": 145
         },
         {
             "name": "Drainage",
-            "icon": "DR",
             "count": 120
+        },
+        {
+            "name": "Other",
+            "count": 0
         }
     ],
 

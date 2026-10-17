@@ -215,7 +215,23 @@ body {
 
 
 .category-icon {
-    font-size: 23px;
+    width: 36px;
+    height: 36px;
+    display: grid;
+    place-items: center;
+    border-radius: 11px;
+    background: #eff5ff;
+    color: #2d63d8;
+}
+
+.category-icon svg {
+    width: 21px;
+    height: 21px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
 }
 
 
@@ -579,9 +595,6 @@ body {
     border-radius: 11px;
     background: #edf3ff;
     color: #2c63d6;
-    font-size: 12px;
-    font-weight: 800;
-    letter-spacing: .3px;
 }
 
 .location-btn { display: inline-flex; align-items: center; gap: 8px; }
